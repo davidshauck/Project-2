@@ -1,1 +1,1 @@
-# Project-2
+# Project #2: Banana Knife Fight
