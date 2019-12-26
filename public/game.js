@@ -2,21 +2,16 @@ $(document).ready(function() {
 
     // APIKEY="t3uiacex9b36"
 
-let result = {};
 let playerArray = [];
-let playersDraftIndex = 0;
 let playerIdIndex = 0;
-let playerImageIndex = 0;
 let playerIds = [];
-let position = "QB";
+let position = "";
 let imagePosition = 1;
-
+let splicePosition = 0;
+let imageUrls = [];
 let playerId = "";
 
-
-
-// document.getElementById("myImg").src = "assets/images/scaffold.gif";
-
+renderImages();
 
 $( ".position-dropdown" ).on( "click", function() {
     // alert( $( this ).text() );
@@ -42,14 +37,9 @@ let playerDropdown = $("<a>");
 
 
         getPlayerIds().then(getPlayerInfo).then(function(data) {
-            console.log("**************");
-            console.log(playerArray);
-            console.log(data.ShortName);
-            console.log("**************");
 
             for (let i = 0; i < 15; i++) {
                 playerDropdown.attr("<div>");
-                // playerDropdown.attr("href", "#");
                 playerDropdown.addClass("dropdown-item");
                 playerDropdown.addClass("player-dropdown");
                 playerDropdown.attr("data-id", playerArray[i].PlayerID);
@@ -60,27 +50,28 @@ let playerDropdown = $("<a>");
                 getImage(function(data){
                     
                     data = JSON.parse(data);
-                    // console.log(data.PhotoUrl);
-                    // result.push(data.PhotoUrl)
-                    // console.log(result);
+
                     $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);
-                    // $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);
         
                     
                 });
             }
             $( ".player-dropdown" ).on( "click", function() {
                 playerId = ($(this).attr("data-id"));
+                
                 populateImageDiv(function(data){
                     
                     data = JSON.parse(data);
                     // console.log(data.PhotoUrl);
                     // result.push(data.PhotoUrl)
                     // console.log(result);
-                    $("#img"+imagePosition).attr("src", data.PhotoUrl);
-                    imagePosition += 1;
-                    console.log(data.PhotoUrl);
-                    console.log(imagePosition);
+                    imageUrls.push(data.PhotoUrl);
+
+                    // let arr2 = imageUrls.filter(a => a !== 'e')
+                    renderImages();
+                    // imagePosition += 1;
+                    console.log(imageUrls);
+                    // console.log(imagePosition);
 
                     // alert( "success")
                     // $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);
@@ -94,56 +85,54 @@ let playerDropdown = $("<a>");
 
 
 
-        
+           // removes images
+    $("#image-grid").on("click",".images", function(e) {
+        e.preventDefault()
+        // imagePosition+=1;
+        splicePosition = $(this).attr("data-position");
+        let imageSrc = ($(this).attr("src"));
+    console.log("splice " + splicePosition);
+    // console.log(array);
+    // $("#img" + $(this).attr("data-position")).attr("src", "./images/150px.png");
+    // array.splice(removeBtn, 1);
+    // console.log(array);
+    // imageUrls.splice(splicePosition);
+    let imageUrls2 = imageUrls.filter(a => a !== imageSrc); 
+    imageUrls = imageUrls2;
+    console.log("&&&&&&&&&&&&&&&&&")
+    console.log(imageUrls2);
+    console.log("&&&&&&&&&&&&&&&&&")
+
+
+
+    // imageUrls = imageUrls.filter(emp => emp.name.localeCompare(name));
+
+// console.log(employees);
+    // imagePosition -= 1;
+    console.log(imageUrls);
+    // updatedImagePosition = imagePosition - 1;
+    // imagePosition = updatedImagePosition;
+    ;
+
+    renderImages();
+
+
+
+
+  });
 
         
-                // playerDropdown.attr("<src>", "https://api.sportsdata.io/v3/nfl/scores/json/Player/19781?key=11e7e6cab8c84674a144d406b28e561d")
-                // playerDropdown.html(players[i].ShortName + " | " + players[i].LastGameFantasyPoints + " | $" + players[i].YahooSalary);
-            // }
-            // data from the weather(userLocation).json file is available here
-          
-
-            // data = JSON.parse(data);
-            // // console.log(dataId);
-            // result = data;
-            // // console.log(result);
-            // playerIds = [];
-
-            
-            // playerIds.push(result[playerImageIndex].PlayerID);
-            // playerImageIndex += 1;
-            // if (playerImageIndex > 10) {
-            //     playerImageIndex = 10;
-            // };
-            
-            // // console.log(playerIds);
-            // playerDropdown.html(result[i].ShortName + " | $" + result[i].YahooSalary);
 
         
         });
         
 
-        // console.log("<img src=" + playerImage());
-        // playerDropdown.appendTo(".drop-test");
-        // getImage(function(data){
-
-        //     data = JSON.parse(data);
-        //     // console.log(data.PhotoUrl);
-        //     // result.push(data.PhotoUrl)
-        //     // console.log(result);
-        //     // $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);
-        //     // $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);
-
-            
-        // });
-
         function getImage(cb){
-
             
             // console.log(playerIdIndex)
             // console.log(cb);
             playerId = playerIds[playerIdIndex];
-            console.log("playerId" + playerId);
+            // console.log("playerId" + playerId);
             // console.log(playerId);
             let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
             playerIdIndex += 1;
@@ -165,43 +154,6 @@ let playerDropdown = $("<a>");
         }
 
 
-        // getId(function(data){
-
-        //     data = JSON.parse(data);
-        //     // console.log(dataId);
-        //     result = data;
-        //     // console.log(result);
-        //     // playerIds = [];
-
-            
-        //     playerIds.push(result[playerIdIndex].PlayerID);
-        //     playerIdIndex += 1;
-        //     if (playerIdIndex > 10) {
-        //         playerIdIndex = 10;
-        //     }
-        //     console.log(playerIds);
-        
-        // });
-
-
-        // function getId(callbackId){
-
-        //     // console.log(callbackId);
-        //     let position = "QB";
-        //     let week = "16";
-        //     let imageUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week +"/" + position + "/FantasyPoints?key=87259770c8654c4aa8d0dd12658e7d93";
-    
-        //     $.ajax({
-        //         url: imageUrl,
-        //         type: "GET",
-        //         dataType: "text",
-        //         cache: false,
-        //         success: function(data){
-        //             // call the callback passed
-        //             callbackId(data);
-        //         }
-        //    });
-        // }
 
     function getPlayerIds() {
         // let position = "QB";
@@ -221,9 +173,9 @@ let playerDropdown = $("<a>");
         for (let i = 0; i < 15; i++) {
             playerIds.push(playerArray[i].PlayerID)
         }
-        console.log(playerIds);
+        // console.log(playerIds);
         // playerIdIndex += 1;
-        console.log(playerIdIndex);
+        // console.log(playerIdIndex);
         if (playerIdIndex > 10) {
             playerIdIndex = 10;
         }
@@ -233,9 +185,9 @@ let playerDropdown = $("<a>");
     
     function getPlayerInfo() {
         
-        console.log("------------------");
-        console.log(playerArray);
-        console.log("------------------");
+        // console.log("------------------");
+        // console.log(playerArray);
+        // console.log("------------------");
 
       return $.ajax("https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93");
     }
@@ -268,6 +220,30 @@ let playerDropdown = $("<a>");
             }
        });
     }
+
+
+
+    function renderImages() {
+        $("#image-grid").empty();
+
+        for (let i = 0; i < ((6 - imageUrls.length) + parseInt(imageUrls.length)); i ++) {
+            console.log("image urls length " + imageUrls.length);
+            let images = $("<img>");
+            images.addClass("images");
+            images.attr("id", "img"+i);
+            images.attr("value", i)
+            images.attr("data-position", i);
+            if (i >= imageUrls.length) {
+                images.attr("src", "./images/150px.png");
+            } else {
+                images.attr("src", imageUrls[i]);
+            }
+            images.attr({ width: "33%", padding: "10px" });
+            $("#image-grid").append(images);
+        };
+        console.log("rendering");
+
+        }
 
 
 
