@@ -9,6 +9,12 @@ img {
     /* overflow: hidden; */
 }
 
+.dropdown-item {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ffffff;
+}
+
 p {
     font-size: 15px;
     /* position: relative; */
@@ -49,15 +55,25 @@ p {
     /* height: 160px; */
 }
 
-.position-list .drop-test {
-    background-color: #3498DB;
-    color: white;
-    padding: 16px;
+.position-list {
+    background-color: lightgray;
+    color: black;
+    /* padding: 16px; */
     font-size: 16px;
     border: none;
     cursor: pointer;
     width: 100%;
 }
+
+/* .dropdown-toggle {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 36px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+} */
 
 .submit-button {
     background-color: #3498DB;

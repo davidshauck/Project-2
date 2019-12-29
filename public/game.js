@@ -9,9 +9,11 @@ $(document).ready(function() {
     let computerTeam = [];
     let computerPlayer = "";
     let localPosition = "";
+    let pushComputer = false;
+    let disable = true;
+    let enable = false;
     let computerBudget = 250;
     let playerBudget = 250;
-
     let cname = "";
     let uname = "";
 
@@ -21,11 +23,13 @@ $(document).ready(function() {
     renderPositionDropdown();
     
     function start() {
-        $(".drop-test").empty();
     // when user clicks the position selector dropdown
-    $('div.position-list a').click(function(e){  
+    $(document.body).on("click", "div.position-list button", function(e) {
+        // enable the player dropdown list
+        $(".player-button").prop("disabled", enable);
+    // $('div.position-list a').click(function(e){  
         e.preventDefault();
-    
+        position = "";
         playerArray = [];
         playerIdIndex = 0;
         playerIds = [];
@@ -33,7 +37,7 @@ $(document).ready(function() {
         playerIdIndex = 0;
         position = $(this).attr("value");
         localPosition = $(this).attr("data-position");
-        console.log("local position " + localPosition);
+        // console.log("local position " + localPosition);
         $(".drop-test").empty();
     
         gameBody();
@@ -43,13 +47,14 @@ $(document).ready(function() {
     
     // main game play function
     function gameBody() {
+        pushComputer = false;
         // reset playerIdIndex to 0
         playerIdIndex = 0;
         // call the function that creates the position dropdown
         renderPositionDropdown();
         // empty the player list dropdown div
         $( ".drop-test" ).empty();
-        console.log("position " + position);
+        // console.log("position " + position);
         // callback function for getting player IDs from API
         getPlayerIds().then(getPlayerInfo).then(function(data) {
         // set random computer player for later use
@@ -77,29 +82,53 @@ $(document).ready(function() {
         } // end of loop
                 
         // click function for selecting a player
-        $( ".player-dropdown" ).on( "click", function() {
+        $( ".player-dropdown" ).on("click", function() {
         // grab the player ID from the click
         playerId = ($(this).attr("data-id"));
         // callback function for grabbing the image
-            populateImageDiv(function(data){
+            populateUserTeam(function(data){
                 // parse the data for use     
                 data = JSON.parse(data);
                 // push the necessary player info to the user's team array
-                userTeam.push({id: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
+
+  
+                
+                function isIncluded(element, index, array) {
+                    console.log("ELEMENT")
+                    console.log(element);
+                    return (element.PlayerID === data.PlayerID);
+                  }
+                  
+                  let compare = userTeam.findIndex(isIncluded); 
+                  console.log("COMPARE " + compare);
+                  if (compare < 0) {
+                    userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
+                    pushComputer = true;
+                    console.log("PUSH UPPER " + pushComputer)
+                  } else {
+                      alert("already on team");
+                  }
+                  
+
+                // console.log("USER TEAM")
+                // console.log(userTeam);
+                // if ((!playerCompareComputer) && (!playerCompareUser)) {
+                // }
                 // call the function that renders the images in the user grid
                 renderUserTeam();
-                $(".position-list").empty();
-                // start             
-                gameBody();       
+                // start next selection             
+                renderPositionDropdown();      
             });
             // callback function for populating the computer's team
             populateComputerTeam(function(data){
                 // parse the data for use
                 data = JSON.parse(data);
                 // push relevant info to the computer's team array if there aren't 6 players yet
+                console.log("PUSH LOWER1 " + pushComputer)
 
                 // **** NEED TO MAKE SURE IT ONLY PUSHES 1 QB, 2 RBS AND 2 WRS. IF PLAYERS ARE DELTED THIS BECOMES AN ISSUE ***
-                if (computerTeam.length < 6) {
+                if ((computerTeam.length < 6) && (pushComputer)) {
+                    console.log("PUSH LOWER2 " + pushComputer)
                     computerTeam.push({id: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: data.Position});
                 };
                 // render the team image grid
@@ -128,7 +157,7 @@ $(document).ready(function() {
               userTeam.splice(i, 1); 
             }
          }
-        console.log(userTeam);
+
         // update the team grid
         renderPositionDropdown();
         renderUserTeam();
@@ -189,7 +218,7 @@ $(document).ready(function() {
           return $.ajax("https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93");
         }
         // part of the whole callback function
-        function populateImageDiv(cb){
+        function populateUserTeam(cb){
     
             console.log("playerId" + playerId);
             // console.log(playerId);
@@ -227,11 +256,14 @@ $(document).ready(function() {
     
         // function that renders the user's image grid
         function renderUserTeam() {
+            $(".player-button").prop("disabled", disable);
+            playerIdIndex = 0;
+            $(".drop-test").empty();
             // empty the div first
             $("#player-image-grid").empty();
             // loop through until we've hit 6
             for (let i = 0; i < ((6 - userTeam.length) + parseInt(userTeam.length)); i ++) {
-                console.log("user team length " + userTeam.length);
+                // console.log("user team length " + userTeam.length);
                 let uimages = $("<img>");
                 let uplayerBox = $("<div>");
                 // images.css({ "max-width": "100%"});
@@ -303,28 +335,31 @@ $(document).ready(function() {
     // function for rendering the positions dropdown
     function renderPositionDropdown() {
         $(".position-list").empty();
-        console.log("**********************")
-        console.log(Object.values(userTeam));
-        console.log(userTeam);
-        console.log("**********************")
+        // console.log("**********************")
+        // console.log(Object.values(userTeam));
+        // console.log(userTeam);
+        // console.log("**********************")
 
     
-        let qbBtn = $("<a class='dropdown-item' data-position='QB' id='QB' value='QB'>");
+        let qbBtn = $("<button class='dropdown-item' data-position='QB' id='QB' value='QB'>");
         qbBtn.html("QB");
-        let rb1Btn = $("<a class='dropdown-item' data-position='RB1' id='RB1' value='RB'>");
+        qbBtn.css({"padding-top": "0px"})
+        let rb1Btn = $("<button class='dropdown-item' data-position='RB1' id='RB1' value='RB'>");
         rb1Btn.html("RB1");
-        let rb2Btn = $("<a class='dropdown-item' data-position='RB2' id='RB2' value='RB'>");
+        let rb2Btn = $("<button class='dropdown-item' data-position='RB2' id='RB2' value='RB'>");
         rb2Btn.html("RB2");
-        let wr1Btn = $("<a class='dropdown-item' data-position='WR1' id='WR1' value='WR'>");
+        let wr1Btn = $("<button class='dropdown-item' data-position='WR1' id='WR1' value='WR'>");
         wr1Btn.html("WR1");
-        let wr2Btn = $("<a class='dropdown-item' data-position='WR2' id='WR2' value='WR'>");
+        let wr2Btn = $("<button class='dropdown-item' data-position='WR2' id='WR2' value='WR'>");
         wr2Btn.html("WR2");
-        let kickBtn = $("<a class='dropdown-item' data-position='K' id='K' value='K'>");
+        let kickBtn = $("<button class='dropdown-item' data-position='K' id='K' value='K'>");
         kickBtn.html("K");
+        kickBtn.css({"padding-bottom": "5px", "border-bottom":"0px"})
         // loop to disable buttons
         for (let i = 0; i < userTeam.length; i++) {
             if (userTeam[i].position === "QB") {
-                qbBtn.addClass("disabled");    
+                qbBtn.addClass("disabled");
+                $("").data("toggle","");   
             }
             if (userTeam[i].position === "RB1") {
                 rb1Btn.addClass("disabled");    
