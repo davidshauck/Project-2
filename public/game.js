@@ -59,6 +59,7 @@ $(document).ready(function() {
         getPlayerIds().then(getPlayerInfo).then(function(data) {
         // set random computer player for later use
         computerPlayer = playerArray[Math.floor(Math.random()*30)].PlayerID;
+        console.log("COMPUTER PLAYER " + computerPlayer);
         // create dynamic list of players for user to choose from
         let playerDropdown = $("<a>");
         // loop through 15 times to give user 15 options
@@ -94,14 +95,16 @@ $(document).ready(function() {
   
                 
                 function isIncluded(element, index, array) {
-                    console.log("ELEMENT")
+                    console.log("ELEMENT UPPER")
                     console.log(element);
                     return (element.PlayerID === data.PlayerID);
                   }
                   
-                  let compare = userTeam.findIndex(isIncluded); 
-                  console.log("COMPARE " + compare);
-                  if (compare < 0) {
+                  let compareUser = userTeam.findIndex(isIncluded);
+                  let compareComputer = computerTeam.findIndex(isIncluded); 
+                  console.log("COMPARE COMPUTER UPPER " + compareComputer);
+                //   console.log("COMPARE " + compareUser);
+                  if ((compareUser < 0) && (compareComputer < 0)) {
                     userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
                     pushComputer = true;
                     console.log("PUSH UPPER " + pushComputer)
@@ -109,12 +112,6 @@ $(document).ready(function() {
                       alert("already on team");
                   }
                   
-
-                // console.log("USER TEAM")
-                // console.log(userTeam);
-                // if ((!playerCompareComputer) && (!playerCompareUser)) {
-                // }
-                // call the function that renders the images in the user grid
                 renderUserTeam();
                 // start next selection             
                 renderPositionDropdown();      
@@ -123,17 +120,29 @@ $(document).ready(function() {
             populateComputerTeam(function(data){
                 // parse the data for use
                 data = JSON.parse(data);
-                // push relevant info to the computer's team array if there aren't 6 players yet
-                console.log("PUSH LOWER1 " + pushComputer)
+
+                function isIncludedB(element, index, array) {
+                    console.log("ELEMENT LOWER")
+                    console.log(element);
+                    return (element.PlayerID === data.PlayerID);
+                  }
+
+                    let compareUserB = userTeam.findIndex(isIncludedB);
+                  let compareComputerB = computerTeam.findIndex(isIncludedB); 
+                  
+                  console.log("USERTEAM" + compareUserB);
+                  console.log("COMPUTER TEAM" + compareComputerB); 
+
 
                 // **** NEED TO MAKE SURE IT ONLY PUSHES 1 QB, 2 RBS AND 2 WRS. IF PLAYERS ARE DELTED THIS BECOMES AN ISSUE ***
-                if ((computerTeam.length < 6) && (pushComputer)) {
+                if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (pushComputer)) {
                     console.log("PUSH LOWER2 " + pushComputer)
-                    computerTeam.push({id: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: data.Position});
+                    computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: data.Position});
                 };
                 // render the team image grid
                 renderComputerTeam();
             });   
+
         }); // end of click function
     
         // empty the player array
@@ -150,7 +159,7 @@ $(document).ready(function() {
         e.preventDefault()
         // set a variable for the clicked image
         let imageSrc = ($(this).attr("src"));
-        console.log("src " + imageSrc);
+        // console.log("src " + imageSrc);
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
             if (userTeam[i].url === imageSrc) {
@@ -202,6 +211,16 @@ $(document).ready(function() {
             playerId = json[playerIdIndex].PlayerID;
             // put all the returned data into a local array
             playerArray = json;
+            // for (let i = 0; i < userTeam.length; i++){
+            //     let includedId = userTeam[i].PlayerId; 
+            //     for (let j = 0; j<playerArray.length; j++) {
+            //         if (playerArray[i].PlayerID === includedId) {
+            //         playerArray.splice(i, 1); 
+            //         }
+            //     }
+            // }
+
+
             // loop through that array and push them to a new playerIds array
             for (let i = 0; i < 15; i++) {
                 playerIds.push(playerArray[i].PlayerID)
@@ -297,7 +316,7 @@ $(document).ready(function() {
             // same deal for the computer
             function renderComputerTeam() {
                 $("#computer-image-grid").empty();
-        
+                
                 for (let i = 0; i < ((6 - computerTeam.length) + parseInt(computerTeam.length)); i ++) {
                     console.log("computer team length " + computerTeam.length);
                     let cimages = $("<img>");
