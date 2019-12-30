@@ -39,21 +39,15 @@ $(document).ready(function() {
         localPosition = $(this).attr("data-position");
         // console.log("local position " + localPosition);
         $(".drop-test").empty();
-    
-        gameBody();
-    
-    });
-    };
+
     
     // main game play function
-    function gameBody() {
         pushComputer = true;
         // reset playerIdIndex to 0
         playerIdIndex = 0;
         // call the function that creates the position dropdown
         renderPositionDropdown();
         // empty the player list dropdown div
-        $( ".drop-test" ).empty();
         // console.log("position " + position);
         // callback function for getting player IDs from API
         getPlayerIds().then(getPlayerInfo).then(function(data) {
@@ -181,23 +175,35 @@ $(document).ready(function() {
         playerArray = [];
         
         }); // end of callback function
+    });
     
-    } // end of gameBody() function
+    }; // end of gameBody() function
     
     start();
     
     // function for removing the players from the team
-    $("#player-image-grid").on("click","#player-image", function(e) {
+    $(document.body).on("click","#player-image-grid", function(e) {
         e.preventDefault()
         // set a variable for the clicked image
-        let imageSrc = ($(this).attr("src"));
+        let deleteRecord = ($(this).text().trim());
+        console.log($(this));
+        console.log("DELETE ID " + deleteRecord)
         // console.log("src " + imageSrc);
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
-            if (userTeam[i].url === imageSrc) {
+            console.log(userTeam[i].name);
+            if (userTeam[i].name === deleteRecord) {
+                // alert("SAME");
               userTeam.splice(i, 1); 
             }
          }
+         // https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+         userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
+         console.log("SALARY");
+         console.log(userSalary)
+
+         userBudget += parseInt(userSalary);
+         $("#user-budget").html("$" + userBudget);
 
         // update the team grid
         renderPositionDropdown();
@@ -314,9 +320,8 @@ $(document).ready(function() {
                 // console.log("user team length " + userTeam.length);
                 let uimages = $("<img>");
                 let uplayerBox = $("<div>");
-                // images.css({ "max-width": "100%"});
-                // uimages.addClass("images");
                 uplayerBox.addClass("rounded float-left images");
+
 
                 if (i >= userTeam.length) {
                     uimages.attr("src", "./images/150px.png");
@@ -325,6 +330,7 @@ $(document).ready(function() {
                 } else {
                     uimages.attr("src", userTeam[i].url);
                     uimages.attr("id", "player-image");
+                    uimages.attr("data-id", userTeam[i].PlayerID);
                     // images.css({height: "100px"})
                     uname = userTeam[i].name;
                 };
