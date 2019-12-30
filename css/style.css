@@ -37,7 +37,7 @@ p {
     float: left;
 }
 
-.budget {
+#user-budget, #computer-budget {
     padding: 10px;
     font-size: 30px;
     font-weight: bold;

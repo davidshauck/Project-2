@@ -13,7 +13,7 @@ $(document).ready(function() {
     let disable = true;
     let enable = false;
     let computerBudget = 250;
-    let playerBudget = 250;
+    let userBudget = 250;
     let cname = "";
     let uname = "";
 
@@ -47,7 +47,7 @@ $(document).ready(function() {
     
     // main game play function
     function gameBody() {
-        pushComputer = false;
+        pushComputer = true;
         // reset playerIdIndex to 0
         playerIdIndex = 0;
         // call the function that creates the position dropdown
@@ -58,7 +58,7 @@ $(document).ready(function() {
         // callback function for getting player IDs from API
         getPlayerIds().then(getPlayerInfo).then(function(data) {
         // set random computer player for later use
-        computerPlayer = playerArray[Math.floor(Math.random()*30)].PlayerID;
+        computerPlayer = playerArray[Math.floor(Math.random()*15)].PlayerID;
         console.log("COMPUTER PLAYER " + computerPlayer);
         // create dynamic list of players for user to choose from
         let playerDropdown = $("<a>");
@@ -69,6 +69,9 @@ $(document).ready(function() {
             playerDropdown.addClass("player-dropdown");
             playerDropdown.attr("data-id", playerArray[i].PlayerID);
             playerDropdown.attr("id", "dd"+i);
+            if (!playerArray[i].YahooSalary) {
+                playerArray[i].YahooSalary = parseInt(5);
+            } 
             playerDropdown.html(playerArray[i].Name + " | $" + playerArray[i].YahooSalary);
             playerDropdown.appendTo(".drop-test");
             
@@ -91,8 +94,6 @@ $(document).ready(function() {
                 // parse the data for use     
                 data = JSON.parse(data);
                 // push the necessary player info to the user's team array
-
-  
                 
                 function isIncluded(element, index, array) {
                     console.log("ELEMENT UPPER")
@@ -101,15 +102,28 @@ $(document).ready(function() {
                   }
                   
                   let compareUser = userTeam.findIndex(isIncluded);
-                  let compareComputer = computerTeam.findIndex(isIncluded); 
+                  let compareComputer = computerTeam.findIndex(isIncluded);
+                  
+                //   let comparePositionUserA = userTeam.findIndex(isIncluded);
+                //   let comparePositionComputerA = computerTeam.findIndex(isIncluded);
+
                   console.log("COMPARE COMPUTER UPPER " + compareComputer);
                 //   console.log("COMPARE " + compareUser);
                   if ((compareUser < 0) && (compareComputer < 0)) {
-                    userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
                     pushComputer = true;
+                    userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
+                    let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary)
+                    console.log("SALARY");
+                    console.log(userSalary)
+                    if (!data.YahooSalary) {
+                        data.YahooSalary = parseInt(5);
+                    }
+                    userBudget -= userSalary;
+                    $("#user-budget").html("$" + userBudget);
+                    
                     console.log("PUSH UPPER " + pushComputer)
                   } else {
-                      alert("already on team");
+                      pushComputer = false;
                   }
                   
                 renderUserTeam();
@@ -120,24 +134,42 @@ $(document).ready(function() {
             populateComputerTeam(function(data){
                 // parse the data for use
                 data = JSON.parse(data);
-
-                function isIncludedB(element, index, array) {
-                    console.log("ELEMENT LOWER")
-                    console.log(element);
-                    return (element.PlayerID === data.PlayerID);
+                function isIncludedB(elementa, index, array) {
+                    return (elementa.PlayerID === data.PlayerID);
                   }
 
-                    let compareUserB = userTeam.findIndex(isIncludedB);
-                  let compareComputerB = computerTeam.findIndex(isIncludedB); 
-                  
-                  console.log("USERTEAM" + compareUserB);
-                  console.log("COMPUTER TEAM" + compareComputerB); 
+                let compareUserB = userTeam.findIndex(isIncludedB);
+                let compareComputerB = computerTeam.findIndex(isIncludedB); 
+
+                function isIncludedC(elementb, index, array) {
+                    return (elementb.position === data.Position);
+                  }
+
+                let comparePositionUser = userTeam.findIndex(isIncludedC);
+                let comparePositionComputer = computerTeam.findIndex(isIncludedC);
+                console.log("COMPARE USER B " + compareUserB);     
+                console.log("COMPARE COMPUTER B " + compareComputerB);                  
+                console.log("PUSH COMPUTER " + pushComputer)
+                console.log("DATA POSITION " + data.Position);
+                // console.log("ELEMENT B POSTION " + (elementb.position === dataPosition));
+
+                // console.log("USER POSITION" + comparePositionUser);
+                console.log("COMPUTER POSITION" + compareComputerB); 
 
 
                 // **** NEED TO MAKE SURE IT ONLY PUSHES 1 QB, 2 RBS AND 2 WRS. IF PLAYERS ARE DELTED THIS BECOMES AN ISSUE ***
-                if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (pushComputer)) {
-                    console.log("PUSH LOWER2 " + pushComputer)
-                    computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: data.Position});
+                if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer)) {
+                    // console.log("PUSH LOWER2 " + pushComputer)
+                    alert("all criteria met");
+                    computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
+                    let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary)
+                    console.log("SALARY");
+                    console.log(computerSalary)
+                    if (!data.YahooSalary) {
+                        data.YahooSalary = parseInt(5);
+                    }
+                    computerBudget -= computerSalary;
+                    $("#computer-budget").html("$" + computerBudget);
                 };
                 // render the team image grid
                 renderComputerTeam();
@@ -175,7 +207,7 @@ $(document).ready(function() {
     // function for calling on API that gets the player image
     function getImage(cb){
     // set the current player ID from the array we populated earlier    
-    playerId = playerIds[playerIdIndex];
+    playerId = playerIds[playerIdIndex].PlayerID;
     // set the url being queried
     let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
     // increment the index so it grabs the next one
@@ -211,20 +243,17 @@ $(document).ready(function() {
             playerId = json[playerIdIndex].PlayerID;
             // put all the returned data into a local array
             playerArray = json;
-            // for (let i = 0; i < userTeam.length; i++){
-            //     let includedId = userTeam[i].PlayerId; 
-            //     for (let j = 0; j<playerArray.length; j++) {
-            //         if (playerArray[i].PlayerID === includedId) {
-            //         playerArray.splice(i, 1); 
-            //         }
-            //     }
-            // }
-
-
             // loop through that array and push them to a new playerIds array
+            playerIds = [];
             for (let i = 0; i < 15; i++) {
-                playerIds.push(playerArray[i].PlayerID)
+                playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, YahooSalary: playerArray[i].YahooSalary})
             }
+            console.log("*******************")
+            console.log(playerIds);
+            console.log("*******************")
+
+            
+
             // stop at the top 15
             if (playerIdIndex > 15) {
                 playerIdIndex = 15;
@@ -354,12 +383,7 @@ $(document).ready(function() {
     // function for rendering the positions dropdown
     function renderPositionDropdown() {
         $(".position-list").empty();
-        // console.log("**********************")
-        // console.log(Object.values(userTeam));
-        // console.log(userTeam);
-        // console.log("**********************")
 
-    
         let qbBtn = $("<button class='dropdown-item' data-position='QB' id='QB' value='QB'>");
         qbBtn.html("QB");
         qbBtn.css({"padding-top": "0px"})
@@ -396,17 +420,6 @@ $(document).ready(function() {
                 kickBtn.addClass("disabled");    
             }
         }
-    
-        // for (let i = 0; i < userTeam.length; i++){ 
-            
-        //     if (userTeam[i].position === "RB") {
-        //         rb1Btn.addClass("disabled"); 
-        //     } else if (userTeam[i].position === "WR") {
-        //         wr1Btn.addClass("disabled"); 
-        //     } else if (userTeam[i].position === "K") {
-        //         kickBtn.addClass("disabled"); 
-        //     } 
-        //  }
     
         $(".position-list").append(qbBtn).append(rb1Btn).append(rb2Btn).append(wr1Btn).append(wr2Btn).append(kickBtn);
         }
