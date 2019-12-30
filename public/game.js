@@ -5,6 +5,8 @@ let playerIdIndex = 0;
 let playerIds = [];
 let position = "";
 let userTeam = [];
+let duplicatePlayer = [];
+let containsQB = [];
 let playerId = "";
 let computerTeam = [];
 let computerPlayer = "";
@@ -100,8 +102,9 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                 // push the object to the user's team array
-                userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
-                let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary)
+                userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position});
+                let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
+
                 // if kicker's value is null then make it $5
                 if (!data.YahooSalary) {
                     data.YahooSalary = parseInt(5);
@@ -126,6 +129,10 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // parse the data for use
             data = JSON.parse(data);
             // callback function to determine if computer player is in user's team
+            
+
+
+
             function isIncludedB(elementa, index, array) {
                 return (elementa.PlayerID === data.PlayerID);
                 }
@@ -140,11 +147,11 @@ $(document.body).on("click", "div.position-list button", function(e) {
             let comparePositionComputer = computerTeam.findIndex(isIncludedC);
 
             // chec, all conditions before pushing to computer's team
-            if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer)) {
+            if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (containsQB.length < 1)) {
                 // if met, push
-                computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition});
+                computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position});
                 // grab the salary from the local array
-                let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary)
+                let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // change null to $5
                 if (!data.YahooSalary) {
                     data.YahooSalary = parseInt(5);
@@ -154,6 +161,16 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // update the budget div
                 $("#computer-budget").html("$" + computerBudget);
             };
+            duplicatePlayer = computerTeam.filter(item => item.Position === data.Position).map(item => item.PlayerID)
+            containsQB = computerTeam.filter(item => item.Position === "QB").map(item => item.PlayerID)
+
+            
+            console.log("@@@@@@@@@@@@@@@@@@");
+            console.log(computerTeam);
+            console.log(data.Position);
+            console.log(duplicatePlayer);
+            console.log(containsQB);
+            console.log("@@@@@@@@@@@@@@@@@@");
             // render the team image grid
             renderComputerTeam();
         });   
@@ -248,11 +265,11 @@ if (playerIdIndex > 15) {
         // loop through that array and push them to a new playerIds array
         playerIds = [];
         for (let i = 0; i < 15; i++) {
-            playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, url: playerArray[i].PhotoUrl, YahooSalary: playerArray[i].YahooSalary})
+            playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
         }
-        // console.log("*******************")
-        // console.log(playerIds);
-        // console.log("*******************")
+        console.log("*******************")
+        console.log(playerIds);
+        console.log("*******************")
 
         
 
