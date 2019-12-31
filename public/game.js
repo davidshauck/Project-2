@@ -6,7 +6,6 @@ let playerIds = [];
 let position = "";
 let userTeam = [];
 let duplicatePlayer = [];
-let containsQB = [];
 let playerId = "";
 let computerTeam = [];
 let computerPlayer = "";
@@ -14,11 +13,10 @@ let localPosition = "";
 let pushComputer = false;
 let disable = true;
 let enable = false;
-let computerBudget = 250;
-let userBudget = 250;
-let cname = "";
-let uname = "";
-let deleteRecord = "";
+let computerBudget = 200;
+let userBudget = 200;
+let computerPlayerName = "";
+let userPlayerName = "";
 
 // run all the necessary functions to get the game loaded
 renderUserTeam();
@@ -29,7 +27,7 @@ function start() {
 // when user clicks the position selector dropdown
 $(document.body).on("click", "div.position-list button", function(e) {
     e.preventDefault();
-    // enable the player dropdown list
+    // enable the player dropdown list when the position list is clicked
     $(".player-button").prop("disabled", enable);
     // reset all variables and divs
     position = "";
@@ -40,9 +38,9 @@ $(document.body).on("click", "div.position-list button", function(e) {
     playerIdIndex = 0;
     pushComputer = true;
     deleteRecord = "";
-    // API's position
+    // set the API's position to be the clicked position value
     position = $(this).attr("value");
-    // game position naming (RB1, RB2, WR1, WR2, etc.)
+    // set the local name of the player's position RB1, RB2, WR1, WR2, etc.)
     localPosition = $(this).attr("data-position");
     // empty the player dropdown div
     $(".drop-test").empty();
@@ -76,8 +74,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // parse the data for use            
             data = JSON.parse(data);
             // prepend it to the div so image appears on the left
-            $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);
-                
+            $("<img src='" + data.PhotoUrl + "'>").prependTo("#dd"+i);       
         });
     } // end of loop
             
@@ -94,6 +91,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             function isIncluded(element, index, array) {
                 return (element.PlayerID === data.PlayerID);
                 }
+                // variables for the return of the functin to determine if players are already on teams
                 let compareUser = userTeam.findIndex(isIncluded);
                 let compareComputer = computerTeam.findIndex(isIncluded);
 
@@ -106,8 +104,9 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
 
                 // if kicker's value is null then make it $5
-                if (!data.YahooSalary) {
-                    data.YahooSalary = parseInt(5);
+                if (!userSalary[0]) {
+                    console.log("KICKER SALARY " + data.YahooSalary)
+                    userSalary = parseInt(5);
                 }
                 // subtract the value of the player from the user's budget
                 userBudget -= userSalary;
@@ -129,34 +128,31 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // parse the data for use
             data = JSON.parse(data);
             // callback function to determine if computer player is in user's team
-            
-
-
-
-            function isIncludedB(elementa, index, array) {
-                return (elementa.PlayerID === data.PlayerID);
+            function isIncludedUser(info, index, array) {
+                return (info.PlayerID === data.PlayerID);
                 }
             // variables that contain the value of the returned function
-            let compareUserB = userTeam.findIndex(isIncludedB);
-            let compareComputerB = computerTeam.findIndex(isIncludedB); 
+            let compareUserB = userTeam.findIndex(isIncludedUser);
+            let compareComputerB = computerTeam.findIndex(isIncludedUser); 
             // function to determine if RB1/RB2 or WR1/WR2 have been duplicated
-            function isIncludedC(elementb, index, array) {
-                return (elementb.position === data.Position);
+            function isIncludedC(moreInfo, index, array) {
+                return (moreInfo.position === data.Position);
                 }
             // variable to hold the return value
             let comparePositionComputer = computerTeam.findIndex(isIncludedC);
 
-            // chec, all conditions before pushing to computer's team
-            if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (containsQB.length < 1)) {
+            // check all conditions before pushing to computer's team
+            if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2)) {
                 // if met, push
                 computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position});
                 // grab the salary from the local array
                 let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
+                // console.log(computerSalary);
                 // change null to $5
-                if (!data.YahooSalary) {
-                    data.YahooSalary = parseInt(5);
+                if (!computerSalary[0]) {
+                    computerSalary = parseInt(5);
                 }
-                // subtract from computer's budget
+                // subtract the value of the player's salary from computer's budget
                 computerBudget -= computerSalary;
                 // update the budget div
                 $("#computer-budget").html("$" + computerBudget);
@@ -165,12 +161,12 @@ $(document.body).on("click", "div.position-list button", function(e) {
             containsQB = computerTeam.filter(item => item.Position === "QB").map(item => item.PlayerID)
 
             
-            console.log("@@@@@@@@@@@@@@@@@@");
-            console.log(computerTeam);
-            console.log(data.Position);
-            console.log(duplicatePlayer);
-            console.log(containsQB);
-            console.log("@@@@@@@@@@@@@@@@@@");
+            // console.log("@@@@@@@@@@@@@@@@@@");
+            // console.log(computerTeam);
+            // console.log(data.Position);
+            // console.log(duplicatePlayer);
+            // console.log(containsQB);
+            // console.log("@@@@@@@@@@@@@@@@@@");
             // render the team image grid
             renderComputerTeam();
         });   
@@ -201,7 +197,7 @@ start();
         for (let i = 0; i < userTeam.length; i++){ 
             console.log(userTeam[i].name);
             console.log("###################")
-            console.log(playerIds);
+            console.log(userTeam);
             console.log("###################")
             if (userTeam[i].name === deleteRecord) {
                 // alert("SAME");
@@ -212,7 +208,9 @@ start();
          userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
          console.log("SALARY");
          console.log(userSalary)
-
+         if (!userSalary) {
+             userSalary = parseInt(5);
+         }
          userBudget += parseInt(userSalary);
          $("#user-budget").html("$" + userBudget);
 
@@ -331,29 +329,29 @@ if (playerIdIndex > 15) {
         // loop through until we've hit 6
         for (let i = 0; i < ((6 - userTeam.length) + parseInt(userTeam.length)); i ++) {
             // console.log("user team length " + userTeam.length);
-            let uimages = $("<img>");
-            let uplayerBox = $("<div>");
-            uplayerBox.addClass("rounded float-left images");
+            let userImages = $("<img>");
+            let userPlayerBox = $("<div>");
+            userPlayerBox.addClass("rounded float-left images");
 
 
             if (i >= userTeam.length) {
-                uimages.attr("src", "./images/150px.jpg");
-                uimages.css({ width: "128px", height: "177px"})
-                uname = "   ";
+                userImages.attr("src", "./images/150px.jpg");
+                userImages.css({ width: "128px", height: "177px"})
+                userPlayerName = "   ";
             } else {
-                uimages.attr("src", userTeam[i].url);
-                uimages.attr("id", "player-image");
-                uimages.attr("data-id", userTeam[i].PlayerID);
+                userImages.attr("src", userTeam[i].url);
+                userImages.attr("id", "player-image");
+                userImages.attr("data-id", userTeam[i].PlayerID);
                 // images.css({height: "100px"})
-                uname = (userTeam[i].name);
+                userPlayerName = (userTeam[i].name);
             };
             // playerBox.attr({ width: "100%", margin: "50px" });
-            let p = $("<p>").text(uname);
+            let p = $("<p>").text(userPlayerName);
             p.attr("id", "player-name");
-            $(uplayerBox).append(uimages);
-            $(uplayerBox).append(p);
-            $("#player-image-grid").append(uplayerBox);
-            // $("#computer-image-grid").append(cname);
+            $(userPlayerBox).append(userImages);
+            $(userPlayerBox).append(p);
+            $("#player-image-grid").append(userPlayerBox);
+            // $("#computer-image-grid").append(computerPlayerName);
             playerIdIndex = 0;
             $(".drop-test").empty();
             start();
@@ -366,23 +364,23 @@ if (playerIdIndex > 15) {
             
             for (let i = 0; i < ((6 - computerTeam.length) + parseInt(computerTeam.length)); i ++) {
                 console.log("computer team length " + computerTeam.length);
-                let cimages = $("<img>");
-                let cplayerBox = $("<div>");
-                $(cplayerBox).addClass("rounded float-right images");
+                let computerImages = $("<img>");
+                let computerPlayerBox = $("<div>");
+                $(computerPlayerBox).addClass("rounded float-right images");
 
                 if (i >= computerTeam.length) {
-                    cimages.attr("src", "./images/150px.jpg");
-                    cimages.css({ width: "128px", height: "177px"})
-                    cname = "   ";
+                    computerImages.attr("src", "./images/150px.jpg");
+                    computerImages.css({ width: "128px", height: "177px"})
+                    computerPlayerName = "   ";
                 } else {
-                    cimages.attr("src", computerTeam[i].url);
-                    cimages.attr("id", "player-image");
-                    cname = computerTeam[i].name;
+                    computerImages.attr("src", computerTeam[i].url);
+                    computerImages.attr("id", "player-image");
+                    computerPlayerName = computerTeam[i].name;
                 };
-                let p = $("<p>").text(cname);
-                $(cplayerBox).append(cimages);
-                $(cplayerBox).append(p);
-                $("#computer-image-grid").append(cplayerBox);
+                let p = $("<p>").text(computerPlayerName);
+                $(computerPlayerBox).append(computerImages);
+                $(computerPlayerBox).append(p);
+                $("#computer-image-grid").append(computerPlayerBox);
                 playerIdIndex = 0;
                 $(".drop-test").empty();
                 start();
@@ -446,7 +444,7 @@ function renderPositionDropdown() {
 
 
 // let playerBox = $("<div class='player-box'>");
-// let p = $("<p>").text("Name " + uname + " | Position | " + userTeam[i].position);
+// let p = $("<p>").text("Name " + userPlayerName + " | Position | " + userTeam[i].position);
 // $(playerBox).addClass("rounded mx-auto d-block");
 // $(playerBox).append(images);
 // $(playerBox).append(p);
