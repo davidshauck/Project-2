@@ -8,6 +8,10 @@
     border-bottom: 1px solid #ffffff;
 }
 
+#computer-image-grid {
+    border-left: 1px solid black;
+}
+
 p {
     font-size: 15px;
     padding: 0px;
@@ -26,9 +30,10 @@ p {
     padding-bottom: 0px;
 }
 
-.title {
+.user-title, .computer-title {
     padding: 10px;
     font-size: 30px;
+    line-height: 30px;
     float: left;
 }
 
@@ -36,7 +41,9 @@ p {
     padding: 10px;
     font-size: 30px;
     font-weight: bold;
+    line-height: 0px;
     float: right;
+    margin-bottom: 5px;
 }
 
 .images {
@@ -80,8 +87,49 @@ p {
     display: block;
 }
 
-.dropdown a:hover {background-color: #ddd;}
+.banner {
+    font-size: 60px;
+    text-align: center;
+}
 
-/* .show {display: block;} */
+@media screen and (min-width: 300px) {
 
+    .user-title {
+        text-align: left;
+        font-size: 24px;
+        float: left;
+        line-height: auto;
+        display: block;
+    }
+
+    .computer-title {
+        text-align: right;
+        font-size: 24px;
+        float: right;
+        line-height: auto;
+        display: block;
+    }
+    
+    #user-budget {
+        text-align: left;
+        float: left;
+        line-height: 100%;
+        display: block;
+        font-size: 60px;
+    }
+
+    #computer-budget {
+        text-align: right;
+        float: right;
+        line-height: 100%;
+        display: block;
+        font-size:60px;
+
+    }
+
+    h1.banner {
+        font-size: 48px;
+    }
+  
+  }
 
