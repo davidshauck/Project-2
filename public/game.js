@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+
+
 let playerArray = [];
 let playerIdIndex = 0;
 let playerIds = [];
@@ -100,7 +102,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                 // push the object to the user's team array
-                userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position});
+                userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position, FantasyPoints: FantasyPoints});
                 let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
 
                 // if kicker's value is null then make it $5
@@ -192,7 +194,18 @@ start();
         let deleteRecord = ($(this).text().trim());
         console.log($(this));
         console.log("DELETE ID " + deleteRecord)
-        // console.log("src " + imageSrc);
+
+         // https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+         userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
+         console.log("SALARY");
+         console.log(userSalary)
+         if (!userSalary) {
+             userSalary = parseInt(5);
+         }
+         userBudget += parseInt(userSalary);
+        //  if (!userBudget) {
+        //      userBudget = 200;
+        //  }
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
             console.log(userTeam[i].name);
@@ -204,15 +217,11 @@ start();
               userTeam.splice(i, 1); 
             }
          }
-         // https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
-         userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
-         console.log("SALARY");
-         console.log(userSalary)
-         if (!userSalary) {
-             userSalary = parseInt(5);
-         }
-         userBudget += parseInt(userSalary);
+        if (userTeam.length === 0) {
+            userBudget = 200;
+        }
          $("#user-budget").html("$" + userBudget);
+
 
     // update the team grid
     renderPositionDropdown();
@@ -253,7 +262,7 @@ if (playerIdIndex > 15) {
         return $.ajax(queryUrl)
         .then(function(response) {
 
-        return response;
+            return response;
         
         }).then(function(json) {
         // grab playerId from the returned data
@@ -318,6 +327,8 @@ if (playerIdIndex > 15) {
             }
         });
     }
+
+    
 
     // function that renders the user's image grid
     function renderUserTeam() {
@@ -431,6 +442,39 @@ function renderPositionDropdown() {
 
     $(".position-list").append(qbBtn).append(rb1Btn).append(rb2Btn).append(wr1Btn).append(wr2Btn).append(kickBtn);
     }
+
+//     $(document.body).on("click", ".submit-button", function(e) {
+//         e.preventDefault();
+
+//     // If the file didn't exist, then it gets created on the fly.
+// fs.appendFile("user.txt", userTeam, function(err) {
+
+//     // If an error was experienced we will log it.
+//     if (err) {
+//       console.log(err);
+//     }
+  
+//     // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+//     else {
+//       console.log("Content Added!");
+//     }
+  
+//   });
+
+//   fs.appendFile("computer.txt", computerTeam, function(err) {
+
+//     // If an error was experienced we will log it.
+//     if (err) {
+//       console.log(err);
+//     }
+  
+//     // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+//     else {
+//       console.log("Content Added!");
+//     }
+  
+//   });
+// });
         
 
     // players.sort((a, b) => (a.PlayerID > b.PlayerID) ? 1 : -1);
