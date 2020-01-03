@@ -11,12 +11,14 @@ let computerTeam = [];
 let computerPlayer = "";
 let localPosition = "";
 let pushComputer = false;
+let deleteRecord = "";
 let disable = true;
 let enable = false;
 let computerBudget = 200;
 let userBudget = 200;
 let computerPlayerName = "";
 let userPlayerName = "";
+let userSalary;
 let week = parseInt([Math.floor(Math.random()*17)]);
 
 
@@ -96,14 +98,15 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 let compareUser = userTeam.findIndex(isIncluded);
                 let compareComputer = computerTeam.findIndex(isIncluded);
 
-                // if player is not yet on either team
+                // if player is not yet on either team (its index would be -1, thus the < 0 to determine if it's in the array)
                 if ((compareUser < 0) && (compareComputer < 0)) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                 // push the object to the user's team array
                 userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
                  //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
-                let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
+                userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
+                console.log(playerIds);
                 // if kicker's value is null then make it $5
                 console.log("USER SALARY ADD BEFORE " + userSalary + "XX");
                 if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
@@ -183,7 +186,7 @@ start();
     $(document.body).on("click","#player-name", function(e) {
         e.preventDefault()
         // set a variable for the clicked image
-        let deleteRecord = ($(this).text().trim());
+        deleteRecord = ($(this).text().trim());
 
          //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
          userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
@@ -256,9 +259,9 @@ if (playerIdIndex > 15) {
         // put all the returned data into a local array
         playerArray = json;
         // loop through that array and push them to a new playerIds array
-        playerIds = [];
+        playerIds = []; // need to clear it out each loop through
         for (let i = 0; i < 15; i++) {
-            playerIds.push({week: week, Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
+            playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
         }
             // stop at the top 15
             if (playerIdIndex > 15) {

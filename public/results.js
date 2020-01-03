@@ -49,16 +49,16 @@ let computerTestScores = [
 // this object will be all games played by the current logged-in user
 let resultsTable = [
     {
-        week: 16, teamOne: "Team Rodney"
+        week: 16, teamName: "Team Rodney", gameId: 1
     },
     {
-        week: 12, teamOne: "Team Rodney"
+        week: 12, teamName: "Team Rodney", gameId: 2
     },
     {
-        week: 14, teamOne: "Team Rodney"
+        week: 14, teamName: "Team Rodney", gameId: 3
     },
     {
-        week: 8, teamOne: "Team Rodney"
+        week: 8, teamName: "Team Rodney", gameId: 4
     }
 ];
 
@@ -70,7 +70,7 @@ let computerScore = 0;
 let userTeamName = "Team Rodney"; // this will eventually come from the user SQL table
 
 // dynamically populate the table with whatever user name is coming from the SQL table
-$("#user-team").html(userTeamName)
+$("#user-team").html(resultsTable[0].teamName);
 $("#week-number").html("<h1>WEEK " + week + "</h1>");
 
 
