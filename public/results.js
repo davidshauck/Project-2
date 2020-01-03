@@ -5,64 +5,64 @@ $(document).ready(function() {
 // WE'LL SAVE ALL THIS DATA TO THE TABLE, THEN WE'LL ACCESS IT FOR USE HERE
 let userTestScores = [
     {
-        Name: "Daniel Jones", PlayerID: 20841, Position: "QB", YahooSalary: 29, week: 16, FantasyPointsYahoo: 54.2
+        week: 10, PlayerID: 14536, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/14536.png", name: "Russell Wilson", localPosition: "QB", Position: "QB"
     },
     {
-        Name: "Saquon Barkley", PlayerID: 19766, Position: "RB", YahooSalary: 47, week: 16, FantasyPointsYahoo: 16.8
+        week: 10, PlayerID: 18375, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18375.png", name: "Peyton Barber", localPosition: "RB1", Position: "RB"
     },
     {
-        Name: "Aaron Jones", PlayerID: 19045, Position: "RB", YahooSalary: 54, week: 16, FantasyPointsYahoo: 22.4
+        week: 10, PlayerID: 20824, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/20824.png", name: "Josh Jacobs", localPosition: "RB2", Position: "RB"
     },
     {
-        Name: "Michael Thomas", PlayerID: 17960, Position: "WR", YahooSalary: 13, week: 16, FantasyPointsYahoo: 9.6
+        week: 10, PlayerID: 11611, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11611.png", name: "Golden Tate", localPosition: "WR1", Position: "WR"
     },
     {
-        Name: "Devante Parker", PlayerID: 16775, Position: "WR", YahooSalary: 3, week: 16, FantasyPointsYahoo: 44.2
+        week: 10, PlayerID: 16020, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/16020.png", name: "Jarvis Landry", localPosition: "WR2", Position: "WR"    
     },
     {
-        Name: "Ka'imi Fairbairn", PlayerID: 18215, Position: "K", YahooSalary: 5, week: 16, FantasyPointsYahoo: 12
+        week: 10, PlayerID: 549, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/549.png", name: "Matt Prater", localPosition: "K", Position: "K"
     }
  
 ];
 
 let computerTestScores = [
     {
-        Name: "Computer Jones", PlayerID: 20841, Position: "QB", YahooSalary: 29, week: 16, FantasyPointsYahoo: 34.2
+        week: 10, PlayerID: 13799, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13799.png", name: "Ryan Tannehill", localPosition: "QB", Position: "QB"
     },
     {
-        Name: "Computer Barkley", PlayerID: 19766, Position: "RB", YahooSalary: 47, week: 16, FantasyPointsYahoo: 26.8
+        week: 10, PlayerID: 19798, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19798.png", name: "Nick Chubb", localPosition: "RB1", Position: "RB"
     },
     {
-        Name: "Computer Jones", PlayerID: 19045, Position: "RB", YahooSalary: 54, week: 16, FantasyPointsYahoo: 24.4
+        week: 10, PlayerID: 18944, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18944.png", name: "Kareem Hunt", localPosition: "RB2", Position: "RB"    
     },
     {
-        Name: "Computer Thomas", PlayerID: 17960, Position: "WR", YahooSalary: 13, week: 16, FantasyPointsYahoo: 27.6
+        week: 10, PlayerID: 13227, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13227.png", name: "Randall Cobb", localPosition: "WR1", Position: "WR"
     },
     {
-        Name: "Computer Parker", PlayerID: 16775, Position: "WR", YahooSalary: 3, week: 16, FantasyPointsYahoo: 32.2
+        week: 10, PlayerID: 19867, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19867.png", name: "Michael Gallup", localPosition: "WR1", Position: "WR"    
     },
     {
-        Name: "Computer Fairbairn", PlayerID: 18215, Position: "K", YahooSalary: 5, week: 16, FantasyPointsYahoo: 8
+        week: 10, PlayerID: 15854, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/15854.png", name: "Brett Maher", localPosition: "K", Position: "K"
     }
- 
 ];
 
+// this object will be all games played by the current logged-in user
 let resultsTable = [
     {
-        week: 16, teamOne: "Team Rodney", teamOnePoints: 176.11, teamTwo: "Computer", teamTwoPoints: 287.87
+        week: 16, teamOne: "Team Rodney"
     },
     {
-        week: 12, teamOne: "Team Rodney", teamOnePoints: 222.54, teamTwo: "Computer", teamTwoPoints: 160.36
+        week: 12, teamOne: "Team Rodney"
     },
     {
-        week: 14, teamOne: "Team Rodney", teamOnePoints: 186.13, teamTwo: "Computer", teamTwoPoints: 324.81
+        week: 14, teamOne: "Team Rodney"
     },
     {
-        week: 8, teamOne: "Team Rodney", teamOnePoints: 213.11, teamTwo: "Computer", teamTwoPoints: 144.22
+        week: 8, teamOne: "Team Rodney"
     }
 ];
 
-let week = "99";
+let week = "99"; // this will eventually pull fromt he table
 let playerId = "";
 let computerId = "";
 let userScore = 0;
@@ -98,6 +98,9 @@ for (let i = 0; i < resultsTable.length; i++) {
 function populateTables() {
 
 for (let i = 0; i < userTestScores.length; i++) {
+
+    $("#week-number").html("<h1>WEEK " + userTestScores[i].week + "</h1>");
+
     // grab the playerId from the saved table
     playerId = userTestScores[i].PlayerID;
     // grab the week from the saved table
@@ -111,7 +114,7 @@ for (let i = 0; i < userTestScores.length; i++) {
         // console.log(info.Name);
 
         let playerRow = $("<tr id='user-row" + i + "'>").append(
-            // $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>"),
+            $("<td><img src='" + userTestScores[i].url + "' style='width: 40px'>"),
             $("<td>").text(info.Name),
             $("<td>").text(" "),
             $("<td>").text(info.FantasyPoints)
@@ -127,25 +130,26 @@ for (let i = 0; i < userTestScores.length; i++) {
 
 }
 
-setTimeout(function(){ 
+// ** LEAVING THIS HERE, MAY NEED IT LATER
+// setTimeout(function(){ 
 
-    for (let i = 0; i<userTestScores.length; i++) {
-        playerId = userTestScores[i].PlayerID;
+//     for (let i = 0; i<userTestScores.length; i++) {
+//         playerId = userTestScores[i].PlayerID;
 
-        getUserImage(function(data){
-            // parse the data for use            
-            data = JSON.parse(data);
-            // console.log(data);
+//         getUserImage(function(data){
+//             // parse the data for use            
+//             data = JSON.parse(data);
+//             // console.log(data);
             
-                $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>").prependTo("#user-row"+i);
+//                 $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>").prependTo("#user-row"+i);
                 
-            // prepend it to the div so image appears on the left
-        });
+//             // prepend it to the div so image appears on the left
+//         });
 
-    }
+//     }
 
 
-}, 500);
+// }, 500);
 
 // loop for populating most recent computer results
 for (let i = 0; i < computerTestScores.length; i++) {
@@ -163,9 +167,10 @@ for (let i = 0; i < computerTestScores.length; i++) {
 
         let computerRow = $("<tr id='computer-row-" + i + "'>").append(
             // $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>"),
-            $("<td>").text(info.Name),
+            $("<td>").text(info.FantasyPoints),
             $("<td>").text(" "),
-            $("<td>").text(info.FantasyPoints)
+            $("<td>").text(info.Name),
+            $("<td><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='text-align: right, float: right'"),
             );
             $("#current-computer-results > tbody").append(computerRow);
 
@@ -181,26 +186,27 @@ for (let i = 0; i < computerTestScores.length; i++) {
 
 }
 
-// setting a delay to cheat on the API in case it hasn't been loaded yet
-setTimeout(function(){ 
+// ** LEAVING THIS HERE, MAY NEED IT LATER
+// // setting a delay to cheat on the API in case it hasn't been loaded yet
+// setTimeout(function(){ 
 
-    for (let i = 0; i<computerTestScores.length; i++) {
-        computerId = computerTestScores[i].PlayerID;
+//     for (let i = 0; i<computerTestScores.length; i++) {
+//         computerId = computerTestScores[i].PlayerID;
 
-        getComputerImage(function(data){
-            // parse the data for use            
-            data = JSON.parse(data);
-            console.log(data);
+//         getComputerImage(function(data){
+//             // parse the data for use            
+//             data = JSON.parse(data);
+//             console.log(data);
             
-                $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>").appendTo("#computer-row-"+i);
+//                 $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>").appendTo("#computer-row-"+i);
                 
-            // prepend it to the div so image appears on the left
-        });
+//             // prepend it to the div so image appears on the left
+//         });
 
-    }
+//     }
 
 
-    }, 500);
+//     }, 500);
 
 } // end of populate tables function
 
