@@ -17,6 +17,8 @@ let computerBudget = 200;
 let userBudget = 200;
 let computerPlayerName = "";
 let userPlayerName = "";
+let week = parseInt([Math.floor(Math.random()*17)]);
+
 
 // run all the necessary functions to get the game loaded
 renderUserTeam();
@@ -48,8 +50,8 @@ $(document.body).on("click", "div.position-list button", function(e) {
     renderPositionDropdown();
     // callback function for getting player IDs from API
     getPlayerIds().then(getPlayerInfo).then(function(data) {
-    // set random computer player for later use (the *15 picks top 15 players; can be changed)
-    computerPlayer = playerArray[Math.floor(Math.random()*15)].PlayerID;
+    // set random computer player for later use (the *20 picks top 20 players; can be changed)
+    computerPlayer = playerArray[Math.floor(Math.random()*20)].PlayerID;
     // create dynamic list of players for user to choose from
     let playerDropdown = $("<a>");
     // loop through 15 times to give user 15 options
@@ -90,7 +92,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             function isIncluded(element, index, array) {
                 return (element.PlayerID === data.PlayerID);
                 }
-                // variables for the return of the functin to determine if players are already on teams
+                // variables for the return of the function to determine if players are already on teams
                 let compareUser = userTeam.findIndex(isIncluded);
                 let compareComputer = computerTeam.findIndex(isIncluded);
 
@@ -99,13 +101,15 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                 // push the object to the user's team array
-                userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
+                userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
                  //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // if kicker's value is null then make it $5
-                if (!userSalary) {
+                console.log("USER SALARY ADD BEFORE " + userSalary + "XX");
+                if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
                     userSalary = parseInt(5);
                 }
+                console.log("USER SALARY ADD AFTER " + userSalary + "XX");
                 // subtract the value of the player from the user's budget
                 userBudget -= userSalary;
                 // update the budget div
@@ -142,7 +146,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // check all conditions before pushing to computer's team
             if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2)) {
                 // if met, push
-                computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
+                computerTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
                 //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // change null to $5
@@ -171,11 +175,10 @@ $(document.body).on("click", "div.position-list button", function(e) {
 }); // end of click function
     
 }; // end of start() function
+
 // call the start function to begin the game 
 start();
 
-
-// THIS WORKS FOR ONE RECORD BUT NOT FOR THE FINAL RECORD WHEN THERE ARE MULTIPLE PLAYERS
     // function for removing the players from the team
     $(document.body).on("click","#player-name", function(e) {
         e.preventDefault()
@@ -184,9 +187,13 @@ start();
 
          //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
          userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
-            if (!userSalary) {
+         console.log("USER SALARY REMOVE BEFORE " + userSalary);
+         // *** GETTING ERROR WHEN DELETING KICKER
+         if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
                 userSalary = parseInt(5);
             }
+        console.log("USER SALARY REMOVE AFTER " + userSalary);
+
          userBudget += parseInt(userSalary);
         //  if (!userBudget) {
         //      userBudget = 200;
@@ -194,15 +201,14 @@ start();
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
             if (userTeam[i].name === deleteRecord) {
-                // alert("SAME");
               userTeam.splice(i, 1); 
             }
          }
+        // when array has 0 objects reset the budget back to $200
         if (userTeam.length === 0) {
             userBudget = 200;
         }
          $("#user-budget").html("$" + userBudget);
-
 
     // update the team grid
     renderPositionDropdown();
@@ -236,8 +242,7 @@ if (playerIdIndex > 15) {
 }
     // function for grabbing the top 15 players and storing their player IDs in an array (got this from Stack Overflow)
     function getPlayerIds() {
-        // let position = "QB";
-        let week = "16";
+        console.log("WEEK " + week)
         let queryUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week +"/" + position + "/FantasyPoints?key=87259770c8654c4aa8d0dd12658e7d93";
 
         return $.ajax(queryUrl)
@@ -253,7 +258,7 @@ if (playerIdIndex > 15) {
         // loop through that array and push them to a new playerIds array
         playerIds = [];
         for (let i = 0; i < 15; i++) {
-            playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
+            playerIds.push({week: week, Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
         }
             // stop at the top 15
             if (playerIdIndex > 15) {
@@ -378,14 +383,14 @@ if (playerIdIndex > 15) {
         }; // end of loop
 
         // once both teams have 6 players, enable the submit button
-        if ((userTeam.length === 6) && (computerTeam.length === 6)) {
+        if ((userTeam.length >= 5) && (computerTeam.length >=5)) {
             $(".submit-button").prop("disabled", false);
         } else {
             $(".submit-button").prop("disabled", true);
         }
         $(document.body).on("click", ".submit-button", function(e) {
             e.preventDefault();
-            console.log("*****USER TEAM*******")
+            console.log("*******USER TEAM*********")
             console.log(userTeam);
             console.log("********************")
             console.log("*****COMPUTER TEAM*******")
