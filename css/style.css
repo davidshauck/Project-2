@@ -15,7 +15,7 @@ body {
 #logo {
     width: 120%;
     margin-top: 12px;
-    padding-right: 25px;
+    padding-right: 30px;
 }
 
 #tagline {
@@ -37,6 +37,7 @@ body {
     font-family: sans-serif;
     margin: 0px;
     border-radius: 0px 0px 10px 10px;
+    z-index: 100;
 }
 
 .align-right {
@@ -59,6 +60,7 @@ p {
 
 .table-points {
     font-size: 22px;
+    vertical-align: middle;
 }
 
 .results-grid {
@@ -72,8 +74,9 @@ p {
 }
 .matchup-grid-bottom {
     background-color: white;
-    padding: 10px;
+    padding: 10px 0px 20px 0px;
     border-radius: 0px 0px 10px 10px;
+    margin-bottom: 20px;
 }
 
 .dropdown-item {
@@ -186,6 +189,7 @@ p {
     background-color: #fbae17;
     color: white;
     padding: 10px;
+    z-index: -1;
 }
 
 .position-list {
