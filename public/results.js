@@ -5,44 +5,44 @@ $(document).ready(function() {
 // WE'LL SAVE ALL THIS DATA TO THE TABLE, THEN WE'LL ACCESS IT FOR USE HERE
 let userTestScores = [
     {
-        week: 10, PlayerID: 14536, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/14536.png", name: "Russell Wilson", localPosition: "QB", Position: "QB"
+        gameId: 1, week: 10, PlayerID: 14536, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/14536.png", name: "Russell Wilson", localPosition: "QB", Position: "QB"
     },
     {
-        week: 10, PlayerID: 18375, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18375.png", name: "Peyton Barber", localPosition: "RB1", Position: "RB"
+        gameId: 1, week: 10, PlayerID: 18375, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18375.png", name: "Peyton Barber", localPosition: "RB1", Position: "RB"
     },
     {
-        week: 10, PlayerID: 20824, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/20824.png", name: "Josh Jacobs", localPosition: "RB2", Position: "RB"
+        gameId: 1, week: 10, PlayerID: 20824, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/20824.png", name: "Josh Jacobs", localPosition: "RB2", Position: "RB"
     },
     {
-        week: 10, PlayerID: 11611, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11611.png", name: "Golden Tate", localPosition: "WR1", Position: "WR"
+        gameId: 1, week: 10, PlayerID: 11611, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11611.png", name: "Golden Tate", localPosition: "WR1", Position: "WR"
     },
     {
-        week: 10, PlayerID: 16020, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/16020.png", name: "Jarvis Landry", localPosition: "WR2", Position: "WR"    
+        gameId: 1, week: 10, PlayerID: 16020, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/16020.png", name: "Jarvis Landry", localPosition: "WR2", Position: "WR"    
     },
     {
-        week: 10, PlayerID: 549, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/549.png", name: "Matt Prater", localPosition: "K", Position: "K"
+        gameId: 1, week: 10, PlayerID: 549, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/549.png", name: "Matt Prater", localPosition: "K", Position: "K"
     }
  
 ];
 
 let computerTestScores = [
     {
-        week: 10, PlayerID: 13799, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13799.png", name: "Ryan Tannehill", localPosition: "QB", Position: "QB"
+        gameId: 1, week: 10, PlayerID: 13799, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13799.png", name: "Ryan Tannehill", localPosition: "QB", Position: "QB"
     },
     {
-        week: 10, PlayerID: 19798, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19798.png", name: "Nick Chubb", localPosition: "RB1", Position: "RB"
+        gameId: 1, week: 10, PlayerID: 19798, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19798.png", name: "Nick Chubb", localPosition: "RB1", Position: "RB"
     },
     {
-        week: 10, PlayerID: 18944, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18944.png", name: "Kareem Hunt", localPosition: "RB2", Position: "RB"    
+        gameId: 1, week: 10, PlayerID: 18944, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18944.png", name: "Kareem Hunt", localPosition: "RB2", Position: "RB"    
     },
     {
-        week: 10, PlayerID: 13227, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13227.png", name: "Randall Cobb", localPosition: "WR1", Position: "WR"
+        gameId: 1, week: 10, PlayerID: 13227, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13227.png", name: "Randall Cobb", localPosition: "WR1", Position: "WR"
     },
     {
-        week: 10, PlayerID: 19867, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19867.png", name: "Michael Gallup", localPosition: "WR1", Position: "WR"    
+        gameId: 1, week: 10, PlayerID: 19867, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19867.png", name: "Michael Gallup", localPosition: "WR1", Position: "WR"    
     },
     {
-        week: 10, PlayerID: 15854, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/15854.png", name: "Brett Maher", localPosition: "K", Position: "K"
+        gameId: 1, week: 10, PlayerID: 15854, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/15854.png", name: "Brett Maher", localPosition: "K", Position: "K"
     }
 ];
 
@@ -70,8 +70,13 @@ let computerScore = 0;
 
 // dynamically populate the table with whatever user name is coming from the SQL table
 $("#user-team").html(resultsTable[0].teamName);
-$("#week-number").html("<h1>WEEK " + week + "</h1>");
+$("#week-number").html("<h1>WEEK " + week + "</h1>").css("style='z-index: -1");
 
+// Rules button
+$(".instructions").css("style='z-index: 100'"); 
+$(".instructions").click(function() {
+    $("p").slideToggle();
+});
 
 // create the past games dropdown
 let weekDropdown = $("<a>");
@@ -84,7 +89,6 @@ for (let i = 0; i < resultsTable.length; i++) {
     console.log(resultsTable[i].week);
         weekDropdown.attr("<div>");
         weekDropdown.addClass("dropdown-item");
-        // weekDropdown.addClass("week-dropdown");
         weekDropdown.attr("data-id", resultsTable[i].week);
         weekDropdown.attr("id", "week"+i);
 
@@ -114,9 +118,9 @@ for (let i = 0; i < userTestScores.length; i++) {
 
         let playerRow = $("<tr id='user-row" + i + "'>").append(
             $("<td><img src='" + userTestScores[i].url + "' style='width: 40px'>"),
-            $("<td style='text-align: left'>").text(info.Name),
+            $("<td style='text-align: left'>").addClass("table-text").text(info.Name),
             $("<td>").text(" "),
-            $("<td style='text-align: right'>").text(info.FantasyPoints)
+            $("<td>").addClass("align-right table-points").text(info.FantasyPoints)
             );
             $("#current-user-results > tbody").append(playerRow);
 
@@ -166,10 +170,10 @@ for (let i = 0; i < computerTestScores.length; i++) {
 
         let computerRow = $("<tr id='computer-row-" + i + "'>").append(
             // $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>"),
-            $("<td>").text(info.FantasyPoints),
+            $("<td>").addClass("table-points").text(info.FantasyPoints),
             $("<td>").text(" "),
-            $("<td style='text-align: right'>").text(info.Name),
-            $("<td style='text-align: right'><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='text-align: right, float: right'"),
+            $("<td>").addClass("align-right table-text").text(info.Name),
+            $("<td><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='float: right'").addClass("align-right"),
             );
             $("#current-computer-results > tbody").append(computerRow);
 
