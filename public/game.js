@@ -11,12 +11,16 @@ let computerTeam = [];
 let computerPlayer = "";
 let localPosition = "";
 let pushComputer = false;
+let deleteRecord = "";
 let disable = true;
 let enable = false;
 let computerBudget = 200;
 let userBudget = 200;
 let computerPlayerName = "";
 let userPlayerName = "";
+let userSalary;
+let week = parseInt([Math.floor(Math.random()*17)]);
+
 
 // run all the necessary functions to get the game loaded
 renderUserTeam();
@@ -48,9 +52,8 @@ $(document.body).on("click", "div.position-list button", function(e) {
     renderPositionDropdown();
     // callback function for getting player IDs from API
     getPlayerIds().then(getPlayerInfo).then(function(data) {
-    // set random computer player for later use (the *15 picks top 15 players; can be changed)
-    computerPlayer = playerArray[Math.floor(Math.random()*15)].PlayerID;
-
+    // set random computer player for later use (the *20 picks top 20 players; can be changed)
+    computerPlayer = playerArray[Math.floor(Math.random()*20)].PlayerID;
     // create dynamic list of players for user to choose from
     let playerDropdown = $("<a>");
     // loop through 15 times to give user 15 options
@@ -91,23 +94,25 @@ $(document.body).on("click", "div.position-list button", function(e) {
             function isIncluded(element, index, array) {
                 return (element.PlayerID === data.PlayerID);
                 }
-                // variables for the return of the functin to determine if players are already on teams
+                // variables for the return of the function to determine if players are already on teams
                 let compareUser = userTeam.findIndex(isIncluded);
                 let compareComputer = computerTeam.findIndex(isIncluded);
 
-                // if player is not yet on either team
+                // if player is not yet on either team (its index would be -1, thus the < 0 to determine if it's in the array)
                 if ((compareUser < 0) && (compareComputer < 0)) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                 // push the object to the user's team array
-                userTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position});
-                let userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
-
+                userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
+                 //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+                userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
+                console.log(playerIds);
                 // if kicker's value is null then make it $5
-                if (!userSalary[0]) {
-                    console.log("KICKER SALARY " + data.YahooSalary)
+                console.log("USER SALARY ADD BEFORE " + userSalary + "XX");
+                if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
                     userSalary = parseInt(5);
                 }
+                console.log("USER SALARY ADD AFTER " + userSalary + "XX");
                 // subtract the value of the player from the user's budget
                 userBudget -= userSalary;
                 // update the budget div
@@ -136,7 +141,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             let compareComputerB = computerTeam.findIndex(isIncludedUser); 
             // function to determine if RB1/RB2 or WR1/WR2 have been duplicated
             function isIncludedC(moreInfo, index, array) {
-                return (moreInfo.position === data.Position);
+                return (moreInfo.localPosition === data.Position);
                 }
             // variable to hold the return value
             let comparePositionComputer = computerTeam.findIndex(isIncludedC);
@@ -144,10 +149,9 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // check all conditions before pushing to computer's team
             if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2)) {
                 // if met, push
-                computerTeam.push({PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, position: localPosition, Position: data.Position});
-                // grab the salary from the local array
+                computerTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
+                //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
-                // console.log(computerSalary);
                 // change null to $5
                 if (!computerSalary[0]) {
                     computerSalary = parseInt(5);
@@ -157,19 +161,13 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // update the budget div
                 $("#computer-budget").html("$" + computerBudget);
             };
+            //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
             duplicatePlayer = computerTeam.filter(item => item.Position === data.Position).map(item => item.PlayerID)
             containsQB = computerTeam.filter(item => item.Position === "QB").map(item => item.PlayerID)
-
-            
-            // console.log("@@@@@@@@@@@@@@@@@@");
-            // console.log(computerTeam);
-            // console.log(data.Position);
-            // console.log(duplicatePlayer);
-            // console.log(containsQB);
-            // console.log("@@@@@@@@@@@@@@@@@@");
-            // render the team image grid
+            // render the team after all these checks
             renderComputerTeam();
-        });   
+   
+        });  // end of populate function 
 
     }); // end of click function
 
@@ -180,38 +178,39 @@ $(document.body).on("click", "div.position-list button", function(e) {
 }); // end of click function
     
 }; // end of start() function
+
 // call the start function to begin the game 
 start();
 
-
-// THIS WORKS FOR ONE RECORD BUT NOT FOR THE FINAL RECORD WHEN THERE ARE MULTIPLE PLAYERS
     // function for removing the players from the team
     $(document.body).on("click","#player-name", function(e) {
         e.preventDefault()
         // set a variable for the clicked image
-        let deleteRecord = ($(this).text().trim());
-        console.log($(this));
-        console.log("DELETE ID " + deleteRecord)
-        // console.log("src " + imageSrc);
+        deleteRecord = ($(this).text().trim());
+
+         //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+         userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
+         console.log("USER SALARY REMOVE BEFORE " + userSalary);
+         // *** GETTING ERROR WHEN DELETING KICKER
+         if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
+                userSalary = parseInt(5);
+            }
+        console.log("USER SALARY REMOVE AFTER " + userSalary);
+
+         userBudget += parseInt(userSalary);
+        //  if (!userBudget) {
+        //      userBudget = 200;
+        //  }
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
-            console.log(userTeam[i].name);
-            console.log("###################")
-            console.log(userTeam);
-            console.log("###################")
             if (userTeam[i].name === deleteRecord) {
-                // alert("SAME");
               userTeam.splice(i, 1); 
             }
          }
-         // https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
-         userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
-         console.log("SALARY");
-         console.log(userSalary)
-         if (!userSalary) {
-             userSalary = parseInt(5);
-         }
-         userBudget += parseInt(userSalary);
+        // when array has 0 objects reset the budget back to $200
+        if (userTeam.length === 0) {
+            userBudget = 200;
+        }
          $("#user-budget").html("$" + userBudget);
 
     // update the team grid
@@ -246,14 +245,13 @@ if (playerIdIndex > 15) {
 }
     // function for grabbing the top 15 players and storing their player IDs in an array (got this from Stack Overflow)
     function getPlayerIds() {
-        // let position = "QB";
-        let week = "16";
+        console.log("WEEK " + week)
         let queryUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week +"/" + position + "/FantasyPoints?key=87259770c8654c4aa8d0dd12658e7d93";
 
         return $.ajax(queryUrl)
         .then(function(response) {
 
-        return response;
+            return response;
         
         }).then(function(json) {
         // grab playerId from the returned data
@@ -261,21 +259,14 @@ if (playerIdIndex > 15) {
         // put all the returned data into a local array
         playerArray = json;
         // loop through that array and push them to a new playerIds array
-        playerIds = [];
+        playerIds = []; // need to clear it out each loop through
         for (let i = 0; i < 15; i++) {
             playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
         }
-        console.log("*******************")
-        console.log(playerIds);
-        console.log("*******************")
-
-        
-
-        // stop at the top 15
-        if (playerIdIndex > 15) {
-            playerIdIndex = 15;
-        }
-
+            // stop at the top 15
+            if (playerIdIndex > 15) {
+                playerIdIndex = 15;
+            }
         })
     }
     // use the playerId to use in the ajax call to grab player info
@@ -285,8 +276,6 @@ if (playerIdIndex > 15) {
     // part of the whole callback function
     function populateUserTeam(cb){
 
-        console.log("playerId" + playerId);
-        // console.log(playerId);
         let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
 
         $.ajax({
@@ -299,12 +288,11 @@ if (playerIdIndex > 15) {
                 cb(data);
             }
         });
-    };
+    }; // end of populate user team function
+
     // a repeat of the function but this time for the computer's team
     function populateComputerTeam(cb){
 
-        console.log("playerId" + computerPlayer);
-        // console.log(playerId);
         let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+computerPlayer+"?key=87259770c8654c4aa8d0dd12658e7d93";
 
         $.ajax({
@@ -317,77 +305,104 @@ if (playerIdIndex > 15) {
                 cb(data);
             }
         });
-    }
+    } // end of populate computer function
 
     // function that renders the user's image grid
     function renderUserTeam() {
         $(".player-button").prop("disabled", disable);
         playerIdIndex = 0;
+        // empty the dropdown to be clear for next time
         $(".drop-test").empty();
         // empty the div first
         $("#player-image-grid").empty();
-        // loop through until we've hit 6
+        // loop through until we've hit 6 players. This formula is set up to still work if the team is less than 6
         for (let i = 0; i < ((6 - userTeam.length) + parseInt(userTeam.length)); i ++) {
-            // console.log("user team length " + userTeam.length);
             let userImages = $("<img>");
             let userPlayerBox = $("<div>");
             userPlayerBox.addClass("rounded float-left images");
 
-
+            // loop for adding images to grid
             if (i >= userTeam.length) {
-                userImages.attr("src", "./images/150px.jpg");
+                // add the placeholder if the team hasn't filled out all players yet
+                userImages.attr("src", "./images/player_placeholder.jpg");
                 userImages.css({ width: "128px", height: "177px"})
                 userPlayerName = "   ";
+            // poulate with image and player name if a player has been selected
             } else {
                 userImages.attr("src", userTeam[i].url);
                 userImages.attr("id", "player-image");
                 userImages.attr("data-id", userTeam[i].PlayerID);
-                // images.css({height: "100px"})
                 userPlayerName = (userTeam[i].name);
             };
-            // playerBox.attr({ width: "100%", margin: "50px" });
+            // append playyer name under the images
             let p = $("<p>").text(userPlayerName);
             p.attr("id", "player-name");
             $(userPlayerBox).append(userImages);
             $(userPlayerBox).append(p);
             $("#player-image-grid").append(userPlayerBox);
-            // $("#computer-image-grid").append(computerPlayerName);
+            // reset the Id index to 0
             playerIdIndex = 0;
+            // empty the div
+            $(".drop-test").empty();
+            // restart for next selection
+            start();
+
+        }; // end of loop
+        
+    } // end of render user team function 
+
+    // same deal for the computer
+    function renderComputerTeam() {
+        // first empty of the the grid
+        $("#computer-image-grid").empty();
+        // loop through until we've hit 6 players. This formula is set up to still work if the team is less than 6
+        for (let i = 0; i < ((6 - computerTeam.length) + parseInt(computerTeam.length)); i ++) {
+            let computerImages = $("<img>");
+            let computerPlayerBox = $("<div>");
+            $(computerPlayerBox).addClass("rounded float-right images");
+            // add the placeholder if the team hasn't filled out all players yet
+            if (i >= computerTeam.length) {
+                computerImages.attr("src", "./images/player_placeholder.jpg");
+                computerImages.css({ width: "128px", height: "177px"})
+                computerPlayerName = "   ";
+            // poulate with image and player name if a player has been selected
+            } else {
+                computerImages.attr("src", computerTeam[i].url);
+                computerImages.attr("id", "player-image");
+                computerPlayerName = computerTeam[i].name;
+            };
+            // append playyer name under the images
+            let p = $("<p>").text(computerPlayerName);
+            $(computerPlayerBox).append(computerImages);
+            $(computerPlayerBox).append(p);
+            // append div to grid
+            $("#computer-image-grid").append(computerPlayerBox);
+            // reset the index
+            playerIdIndex = 0;
+            // empty the player dropdown
             $(".drop-test").empty();
             start();
-        };
-        
-        }
-        // same deal for the computer
-        function renderComputerTeam() {
-            $("#computer-image-grid").empty();
             
-            for (let i = 0; i < ((6 - computerTeam.length) + parseInt(computerTeam.length)); i ++) {
-                console.log("computer team length " + computerTeam.length);
-                let computerImages = $("<img>");
-                let computerPlayerBox = $("<div>");
-                $(computerPlayerBox).addClass("rounded float-right images");
+        }; // end of loop
 
-                if (i >= computerTeam.length) {
-                    computerImages.attr("src", "./images/150px.jpg");
-                    computerImages.css({ width: "128px", height: "177px"})
-                    computerPlayerName = "   ";
-                } else {
-                    computerImages.attr("src", computerTeam[i].url);
-                    computerImages.attr("id", "player-image");
-                    computerPlayerName = computerTeam[i].name;
-                };
-                let p = $("<p>").text(computerPlayerName);
-                $(computerPlayerBox).append(computerImages);
-                $(computerPlayerBox).append(p);
-                $("#computer-image-grid").append(computerPlayerBox);
-                playerIdIndex = 0;
-                $(".drop-test").empty();
-                start();
-            };
-            console.log("rendering computer");
-    
-            }
+        // once both teams have 6 players, enable the submit button
+        if ((userTeam.length >= 5) && (computerTeam.length >=5)) {
+            $(".submit-button").prop("disabled", false);
+        } else {
+            $(".submit-button").prop("disabled", true);
+        }
+        $(document.body).on("click", ".submit-button", function(e) {
+            e.preventDefault();
+            console.log("*******USER TEAM*********")
+            console.log(userTeam);
+            console.log("********************")
+            console.log("*****COMPUTER TEAM*******")
+            console.log(computerTeam);
+            console.log("********************")
+        });
+
+    } // end of render function
+
 // function for rendering the positions dropdown
 function renderPositionDropdown() {
     $(".position-list").empty();
@@ -408,47 +423,28 @@ function renderPositionDropdown() {
     kickBtn.css({"padding-bottom": "5px", "border-bottom":"0px"})
     // loop to disable buttons
     for (let i = 0; i < userTeam.length; i++) {
-        if (userTeam[i].position === "QB") {
+        if (userTeam[i].localPosition === "QB") {
             qbBtn.addClass("disabled");
             $("").data("toggle","");   
         }
-        if (userTeam[i].position === "RB1") {
+        if (userTeam[i].localPosition === "RB1") {
             rb1Btn.addClass("disabled");    
         }
-        if (userTeam[i].position === "RB2") {
+        if (userTeam[i].localPosition === "RB2") {
             rb2Btn.addClass("disabled");    
         }
-        if (userTeam[i].position === "WR1") {
+        if (userTeam[i].localPosition === "WR1") {
             wr1Btn.addClass("disabled");    
         }
-        if (userTeam[i].position === "WR2") {
+        if (userTeam[i].localPosition === "WR2") {
             wr2Btn.addClass("disabled");    
         }
-        if (userTeam[i].position === "K") {
+        if (userTeam[i].localPosition === "K") {
             kickBtn.addClass("disabled");    
         }
     }
-
-    $(".position-list").append(qbBtn).append(rb1Btn).append(rb2Btn).append(wr1Btn).append(wr2Btn).append(kickBtn);
-    }
-        
-
-    // players.sort((a, b) => (a.PlayerID > b.PlayerID) ? 1 : -1);
-    // console.log(players);
-
-    // APIKEY="t3uiacex9b36"
-// let arr = ['Gavin', 'Richard', 'Erlich', 'Gilfoyle'];
-// console.log(arr.includes('Erlich'));
-
-
-
-
-// let playerBox = $("<div class='player-box'>");
-// let p = $("<p>").text("Name " + userPlayerName + " | Position | " + userTeam[i].position);
-// $(playerBox).addClass("rounded mx-auto d-block");
-// $(playerBox).append(images);
-// $(playerBox).append(p);
-// $(playerBox).css({"display": "inline-block"})
-
+        $(".position-list").append(qbBtn).append(rb1Btn).append(rb2Btn).append(wr1Btn).append(wr2Btn).append(kickBtn);
+    
+    } // end position dropdown loop
 
 });
