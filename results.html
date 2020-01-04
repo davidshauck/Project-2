@@ -19,23 +19,29 @@
 </head>
 <body>
     <!-- this pulls in the header from an external file -->
-    <object style="width: 100%; height: 280px" type="text/html" data="header.html"></object>
+    <object style="width: 100%; height: 80px" type="text/html" data="header.html"></object>
 
       
-      <div class="container">
+      <div class="container matchup-grid" style="padding: 0px">
           <div class="row">
           <div class="col-12">
-            <div id="week-number"></div> <!-- this is where the week number goes-->
+            <div id="week-number">
+              <!-- this is where the week number goes-->
+            </div>
           </div>
           </div>
         </div>
 
-        <div class="container">
+        <div class="container matchup-grid">
           <div class="row">
             <div class="col-md-6 col-sm-12">
               <div class="row">
-                <div class="col-lg-10 col-md-10" id="user-team"></div>
-                <div class="col-lg-2 col-md-2" id="user-points">322.6</div>
+                <div class="col-lg-10 col-md-10" id="user-team">
+                  <!-- this is where the team name appears -->
+                </div>
+                <div class="col-lg-2 col-md-2" id="user-points">
+                  <!-- this is where the user points appear -->
+                </div>
               </div>
                 <table class="table table-striped" id="current-user-results">
                   <thead>     
@@ -43,18 +49,20 @@
                       <th scope="col">Player</th>
                       <th scope="col"></th>
                       <th scope="col"></th>
-                      <th scope="col">Points</th>
+                      <th scope="col" style="text-align: right">Points</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- this is where the dynamic user results go -->
+                    <!-- this is where the user results appear -->
                 </tbody>
             </table>
           </div>
           <div class="col-md-6 col-sm-12">
             <div class="row">
-              <div class="col-lg-2 col-md-2" id="computer-points">344.6</div>
-              <div class="col-lg-10 col-md-10" id="computer-team" style="text-align: right">Computer</div>
+              <div class="col-lg-2 col-md-2" id="computer-points">
+                <!-- this is where the computer points appear -->
+              </div>
+              <div class="col-lg-10 col-md-10" id="computer-team">The Computer</div>
             </div>
               <table class="table table-striped" id="current-computer-results">
                 <thead>     
@@ -62,7 +70,7 @@
                     <th scope="col">Points</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
-                    <th scope="col">Player</th>
+                    <th scope="col" style="text-align: right">Player</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -74,13 +82,13 @@
         </div>
 
       <!-- this is the past weeks button area -->
-      <div class="container">
+      <div class="container matchup-grid-bottom">
         <div class="row button-row">
           <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12"></div>
           <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
             <div class="dropdown">
               <div class="dropdown show">
-                <a class="btn btn-primary dropdown-toggle player-button" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Previous Games</a>
+                <a class="btn dropdown-toggle player-button" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Previous Games</a>
                 <div class="dropdown-menu week-dropdown" aria-labelledby="dropdownMenuLink">
                   <!-- this div is where the player dropdown dynamically populates-->
                 </div>

@@ -67,7 +67,6 @@ let playerId = "";
 let computerId = "";
 let userScore = 0;
 let computerScore = 0;
-let userTeamName = "Team Rodney"; // this will eventually come from the user SQL table
 
 // dynamically populate the table with whatever user name is coming from the SQL table
 $("#user-team").html(resultsTable[0].teamName);
@@ -115,9 +114,9 @@ for (let i = 0; i < userTestScores.length; i++) {
 
         let playerRow = $("<tr id='user-row" + i + "'>").append(
             $("<td><img src='" + userTestScores[i].url + "' style='width: 40px'>"),
-            $("<td>").text(info.Name),
+            $("<td style='text-align: left'>").text(info.Name),
             $("<td>").text(" "),
-            $("<td>").text(info.FantasyPoints)
+            $("<td style='text-align: right'>").text(info.FantasyPoints)
             );
             $("#current-user-results > tbody").append(playerRow);
 
@@ -169,8 +168,8 @@ for (let i = 0; i < computerTestScores.length; i++) {
             // $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>"),
             $("<td>").text(info.FantasyPoints),
             $("<td>").text(" "),
-            $("<td>").text(info.Name),
-            $("<td><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='text-align: right, float: right'"),
+            $("<td style='text-align: right'>").text(info.Name),
+            $("<td style='text-align: right'><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='text-align: right, float: right'"),
             );
             $("#current-computer-results > tbody").append(computerRow);
 
@@ -179,7 +178,6 @@ for (let i = 0; i < computerTestScores.length; i++) {
             // add up the columns
             computerScore += parseFloat(info.FantasyPoints);
             // update the score div
-            // $("#user-points").html(userScore);
             $("#computer-points").html(computerScore.toFixed(2));
 
     });

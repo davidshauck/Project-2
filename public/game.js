@@ -324,7 +324,7 @@ if (playerIdIndex > 15) {
             // loop for adding images to grid
             if (i >= userTeam.length) {
                 // add the placeholder if the team hasn't filled out all players yet
-                userImages.attr("src", "./images/150px.jpg");
+                userImages.attr("src", "./images/player_placeholder.jpg");
                 userImages.css({ width: "128px", height: "177px"})
                 userPlayerName = "   ";
             // poulate with image and player name if a player has been selected
@@ -362,7 +362,7 @@ if (playerIdIndex > 15) {
             $(computerPlayerBox).addClass("rounded float-right images");
             // add the placeholder if the team hasn't filled out all players yet
             if (i >= computerTeam.length) {
-                computerImages.attr("src", "./images/150px.jpg");
+                computerImages.attr("src", "./images/player_placeholder.jpg");
                 computerImages.css({ width: "128px", height: "177px"})
                 computerPlayerName = "   ";
             // poulate with image and player name if a player has been selected
