@@ -5,44 +5,44 @@ $(document).ready(function() {
 // WE'LL SAVE ALL THIS DATA TO THE TABLE, THEN WE'LL ACCESS IT FOR USE HERE
 let userTestScores = [
     {
-        week: 10, PlayerID: 14536, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/14536.png", name: "Russell Wilson", localPosition: "QB", Position: "QB"
+        gameId: 1, week: 10, PlayerID: 14536, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/14536.png", name: "Russell Wilson", localPosition: "QB", Position: "QB"
     },
     {
-        week: 10, PlayerID: 18375, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18375.png", name: "Peyton Barber", localPosition: "RB1", Position: "RB"
+        gameId: 1, week: 10, PlayerID: 18375, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18375.png", name: "Peyton Barber", localPosition: "RB1", Position: "RB"
     },
     {
-        week: 10, PlayerID: 20824, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/20824.png", name: "Josh Jacobs", localPosition: "RB2", Position: "RB"
+        gameId: 1, week: 10, PlayerID: 20824, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/20824.png", name: "Josh Jacobs", localPosition: "RB2", Position: "RB"
     },
     {
-        week: 10, PlayerID: 11611, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11611.png", name: "Golden Tate", localPosition: "WR1", Position: "WR"
+        gameId: 1, week: 10, PlayerID: 11611, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11611.png", name: "Golden Tate", localPosition: "WR1", Position: "WR"
     },
     {
-        week: 10, PlayerID: 16020, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/16020.png", name: "Jarvis Landry", localPosition: "WR2", Position: "WR"    
+        gameId: 1, week: 10, PlayerID: 16020, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/16020.png", name: "Jarvis Landry", localPosition: "WR2", Position: "WR"    
     },
     {
-        week: 10, PlayerID: 549, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/549.png", name: "Matt Prater", localPosition: "K", Position: "K"
+        gameId: 1, week: 10, PlayerID: 549, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/549.png", name: "Matt Prater", localPosition: "K", Position: "K"
     }
  
 ];
 
 let computerTestScores = [
     {
-        week: 10, PlayerID: 13799, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13799.png", name: "Ryan Tannehill", localPosition: "QB", Position: "QB"
+        gameId: 1, week: 10, PlayerID: 13799, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13799.png", name: "Ryan Tannehill", localPosition: "QB", Position: "QB"
     },
     {
-        week: 10, PlayerID: 19798, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19798.png", name: "Nick Chubb", localPosition: "RB1", Position: "RB"
+        gameId: 1, week: 10, PlayerID: 19798, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19798.png", name: "Nick Chubb", localPosition: "RB1", Position: "RB"
     },
     {
-        week: 10, PlayerID: 18944, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18944.png", name: "Kareem Hunt", localPosition: "RB2", Position: "RB"    
+        gameId: 1, week: 10, PlayerID: 18944, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18944.png", name: "Kareem Hunt", localPosition: "RB2", Position: "RB"    
     },
     {
-        week: 10, PlayerID: 13227, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13227.png", name: "Randall Cobb", localPosition: "WR1", Position: "WR"
+        gameId: 1, week: 10, PlayerID: 13227, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/13227.png", name: "Randall Cobb", localPosition: "WR1", Position: "WR"
     },
     {
-        week: 10, PlayerID: 19867, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19867.png", name: "Michael Gallup", localPosition: "WR1", Position: "WR"    
+        gameId: 1, week: 10, PlayerID: 19867, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19867.png", name: "Michael Gallup", localPosition: "WR1", Position: "WR"    
     },
     {
-        week: 10, PlayerID: 15854, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/15854.png", name: "Brett Maher", localPosition: "K", Position: "K"
+        gameId: 1, week: 10, PlayerID: 15854, url: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/15854.png", name: "Brett Maher", localPosition: "K", Position: "K"
     }
 ];
 
