@@ -70,8 +70,13 @@ let computerScore = 0;
 
 // dynamically populate the table with whatever user name is coming from the SQL table
 $("#user-team").html(resultsTable[0].teamName);
-$("#week-number").html("<h1>WEEK " + week + "</h1>");
+$("#week-number").html("<h1>WEEK " + week + "</h1>").css("style='z-index: -1");
 
+// Rules button
+$(".instructions").css("style='z-index: 100'"); 
+$(".instructions").click(function() {
+    $("p").slideToggle();
+});
 
 // create the past games dropdown
 let weekDropdown = $("<a>");
@@ -84,7 +89,6 @@ for (let i = 0; i < resultsTable.length; i++) {
     console.log(resultsTable[i].week);
         weekDropdown.attr("<div>");
         weekDropdown.addClass("dropdown-item");
-        // weekDropdown.addClass("week-dropdown");
         weekDropdown.attr("data-id", resultsTable[i].week);
         weekDropdown.attr("id", "week"+i);
 
