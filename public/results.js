@@ -114,9 +114,9 @@ for (let i = 0; i < userTestScores.length; i++) {
 
         let playerRow = $("<tr id='user-row" + i + "'>").append(
             $("<td><img src='" + userTestScores[i].url + "' style='width: 40px'>"),
-            $("<td style='text-align: left'>").text(info.Name),
+            $("<td style='text-align: left'>").addClass("table-text").text(info.Name),
             $("<td>").text(" "),
-            $("<td style='text-align: right'>").text(info.FantasyPoints)
+            $("<td>").addClass("align-right table-points").text(info.FantasyPoints)
             );
             $("#current-user-results > tbody").append(playerRow);
 
@@ -166,10 +166,10 @@ for (let i = 0; i < computerTestScores.length; i++) {
 
         let computerRow = $("<tr id='computer-row-" + i + "'>").append(
             // $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>"),
-            $("<td>").text(info.FantasyPoints),
+            $("<td>").addClass("table-points").text(info.FantasyPoints),
             $("<td>").text(" "),
-            $("<td style='text-align: right'>").text(info.Name),
-            $("<td style='text-align: right'><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='text-align: right, float: right'"),
+            $("<td>").addClass("align-right table-text").text(info.Name),
+            $("<td><img src='" + computerTestScores[i].url + "' style='width: 40px'> style='float: right'").addClass("align-right"),
             );
             $("#current-computer-results > tbody").append(computerRow);
 

@@ -14,11 +14,12 @@ let pushComputer = false;
 let deleteRecord = "";
 let disable = true;
 let enable = false;
-let computerBudget = 200;
-let userBudget = 200;
+let computerBudget = 150;
+let userBudget = 150;
 let computerPlayerName = "";
 let userPlayerName = "";
 let userSalary;
+let userName = "Team Rodney"; // this will be dynamic once we create the login process
 let week = parseInt([Math.floor(Math.random()*17)]);
 
 
@@ -27,7 +28,14 @@ renderUserTeam();
 renderComputerTeam();
 renderPositionDropdown();
 
+// Rules button
+$(".instructions").click(function() {
+    $("p").slideToggle(); 
+});
+
 function start() {
+// populate the team name div
+$(".user-title").html(userName);
 // when user clicks the position selector dropdown
 $(document.body).on("click", "div.position-list button", function(e) {
     e.preventDefault();
@@ -198,9 +206,7 @@ start();
         console.log("USER SALARY REMOVE AFTER " + userSalary);
 
          userBudget += parseInt(userSalary);
-        //  if (!userBudget) {
-        //      userBudget = 200;
-        //  }
+   
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
             if (userTeam[i].name === deleteRecord) {
@@ -209,7 +215,7 @@ start();
          }
         // when array has 0 objects reset the budget back to $200
         if (userTeam.length === 0) {
-            userBudget = 200;
+            userBudget = 150;
         }
          $("#user-budget").html("$" + userBudget);
 
