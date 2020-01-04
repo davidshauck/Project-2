@@ -29,8 +29,9 @@ renderComputerTeam();
 renderPositionDropdown();
 
 // Rules button
+$("p#instructions-text").hide(); 
 $(".instructions").click(function() {
-    $("p").slideToggle(); 
+    $("p#instructions-text").slideToggle(); 
 });
 
 function start() {
@@ -128,6 +129,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // change push boolean to false if criteria not met
                 } else {
                     // change the push boolean to false
+                    $('#myModal').modal('show');
                     pushComputer = false;
                 }
             // render the user grid
