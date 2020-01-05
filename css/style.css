@@ -244,6 +244,15 @@ p#player-name {
     border-bottom: 1px solid #ffffff;
 }
 
+.week-dropdown {
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 90%;
+}
+
 /* navigation styles */
 
 ul {
