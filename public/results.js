@@ -72,11 +72,11 @@ let computerScore = 0;
 $("#user-team").html(resultsTable[0].teamName);
 $("#week-number").html("<h1>WEEK " + week + "</h1>").css("style='z-index: -1");
 
-// Rules button
-$(".instructions").css("style='z-index: 100'"); 
-$(".instructions").click(function() {
-    $("p").slideToggle();
-});
+// // Rules button
+// $(".instructions").css("style='z-index: 100'"); 
+// $(".instructions").click(function() {
+//     $("p").slideToggle();
+// });
 
 // create the past games dropdown
 let weekDropdown = $("<a>");
@@ -91,8 +91,6 @@ for (let i = 0; i < resultsTable.length; i++) {
         weekDropdown.addClass("dropdown-item");
         weekDropdown.attr("data-id", resultsTable[i].week);
         weekDropdown.attr("id", "week"+i);
-
-        // populate dropdown with name and draft value
         weekDropdown.html(resultsTable[i].week);
         weekDropdown.appendTo(".week-dropdown");
 
@@ -188,27 +186,6 @@ for (let i = 0; i < computerTestScores.length; i++) {
 
 }
 
-// ** LEAVING THIS HERE, MAY NEED IT LATER
-// // setting a delay to cheat on the API in case it hasn't been loaded yet
-// setTimeout(function(){ 
-
-//     for (let i = 0; i<computerTestScores.length; i++) {
-//         computerId = computerTestScores[i].PlayerID;
-
-//         getComputerImage(function(data){
-//             // parse the data for use            
-//             data = JSON.parse(data);
-//             console.log(data);
-            
-//                 $("<td><img src='" + data.PhotoUrl + "' style='width: 35px'>").appendTo("#computer-row-"+i);
-                
-//             // prepend it to the div so image appears on the left
-//         });
-
-//     }
-
-
-//     }, 500);
 
 } // end of populate tables function
 
@@ -216,39 +193,39 @@ for (let i = 0; i < computerTestScores.length; i++) {
 populateTables();
 
 
-// function for calling on API that gets the player images
-function getUserImage(cb){
-// set the url being queried
-let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
-// increment the index so it grabs the next one 
-    $.ajax({
-        url: playerUrl,
-        type: "GET",
-        dataType: "text",
-        cache: false,
-        success: function(data){
-            // call the callback passed
-            cb(data);
-        }
-    });
-}
+// // function for calling on API that gets the player images
+// function getUserImage(cb){
+// // set the url being queried
+// let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
+// // increment the index so it grabs the next one 
+//     $.ajax({
+//         url: playerUrl,
+//         type: "GET",
+//         dataType: "text",
+//         cache: false,
+//         success: function(data){
+//             // call the callback passed
+//             cb(data);
+//         }
+//     });
+// }
 
-// same but for computer images
-function getComputerImage(cb){
-    // set the url being queried
-    let computerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+computerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
-    // increment the index so it grabs the next one 
-        $.ajax({
-            url: computerUrl,
-            type: "GET",
-            dataType: "text",
-            cache: false,
-            success: function(info){
-                // call the callback passed
-                cb(info);
-            }
-        });
-    }
+// // same but for computer images
+// function getComputerImage(cb){
+//     // set the url being queried
+//     let computerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/"+computerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
+//     // increment the index so it grabs the next one 
+//         $.ajax({
+//             url: computerUrl,
+//             type: "GET",
+//             dataType: "text",
+//             cache: false,
+//             success: function(info){
+//                 // call the callback passed
+//                 cb(info);
+//             }
+//         });
+//     }
 
     // LEAVING THIS HERE IN CASE WE WANT TO TRY TO CREATE A PAST GAMES TABLE
     // // function that renders the past results table
