@@ -5,7 +5,7 @@
 /* universal styles */
 
 body {
-    background-image: url("../images/stadium.jpg");
+    background-image: url("../images/stadium2.jpg");
 }
 
 .header {
@@ -168,6 +168,16 @@ p#player-name {
     border: none;
     cursor: pointer;
     width: 100%;
+    /* height: auto;
+    max-height: 200px;
+    overflow-x: hidden; */
+}
+
+.drop-test {
+    height: auto;
+    max-height: 550px;
+    overflow-x: hidden;
+    width: 50%;
 }
 
 .submit-button {

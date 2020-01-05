@@ -18,6 +18,7 @@ let computerBudget = 150;
 let userBudget = 150;
 let computerPlayerName = "";
 let userPlayerName = "";
+let dataPosition = "";
 let userSalary;
 let userName = "Team Rodney"; // this will be dynamic once we create the login process
 let week = parseInt([Math.floor(Math.random()*17)]);
@@ -112,15 +113,21 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                 // push the object to the user's team array
-                userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
+                // userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
                  //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 console.log(playerIds);
                 // if kicker's value is null then make it $5
                 console.log("USER SALARY ADD BEFORE " + userSalary + "XX");
-                if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
-                    userSalary = parseInt(5);
+                // if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
+                //     userSalary = parseInt(5);
+                // }
+                console.log(data.Position);
+                if (data.Position === "K") {
+                    userSalary = 5;
                 }
+                // push the object to the user's team array
+                userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, salary: userSalary});
                 console.log("USER SALARY ADD AFTER " + userSalary + "XX");
                 // subtract the value of the player from the user's budget
                 userBudget -= userSalary;
@@ -198,24 +205,27 @@ start();
         // set a variable for the clicked image
         deleteRecord = ($(this).text().trim());
 
-         //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
-         userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
-         console.log("USER SALARY REMOVE BEFORE " + userSalary);
-         // *** GETTING ERROR WHEN DELETING KICKER
-         if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
-                userSalary = parseInt(5);
-            }
-        console.log("USER SALARY REMOVE AFTER " + userSalary);
-
-         userBudget += parseInt(userSalary);
+        //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+        userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
+        // if the player is a kicker set the salary to $5
+        if ($(this).attr("data-pos") === "K") {
+            userSalary = 5;
+        }
+        // add the deleted salary back to the budget;
+        userBudget += parseInt(userSalary);
    
         // loop through the user's team to find the corresponding player and splice it out
         for (let i = 0; i < userTeam.length; i++){ 
             if (userTeam[i].name === deleteRecord) {
               userTeam.splice(i, 1); 
             }
-         }
-        // when array has 0 objects reset the budget back to $200
+        }
+        // reset the budget and loop through to subtract the player salaries in the array
+        userBudget = 150;
+        for (let i = 0; i < userTeam.length; i++) {
+            userBudget -= userTeam[i].salary;   
+        }
+        // when array has 0 objects reset the budget back to $150
         if (userTeam.length === 0) {
             userBudget = 150;
         }
@@ -269,6 +279,13 @@ if (playerIdIndex > 15) {
         // loop through that array and push them to a new playerIds array
         playerIds = []; // need to clear it out each loop through
         for (let i = 0; i < 15; i++) {
+            // console.log(playerArray[i].YahooSalary);
+            if (!playerArray[i].YahooSalary) {
+                playerArray[i].YahooSalary =5;
+            }
+            console.log(playerIds);
+            console.log(userTeam);
+            // console.log(playerArray[i].YahooSalary);
             playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
         }
             // stop at the top 15
@@ -341,10 +358,12 @@ if (playerIdIndex > 15) {
                 userImages.attr("id", "player-image");
                 userImages.attr("data-id", userTeam[i].PlayerID);
                 userPlayerName = (userTeam[i].name);
+                dataPosition = userTeam[i].Position;
             };
             // append playyer name under the images
             let p = $("<p>").text(userPlayerName);
             p.attr("id", "player-name");
+            p.attr("data-pos", dataPosition);
             $(userPlayerBox).append(userImages);
             $(userPlayerBox).append(p);
             $("#player-image-grid").append(userPlayerBox);
