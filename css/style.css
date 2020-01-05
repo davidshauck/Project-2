@@ -6,6 +6,10 @@
 
 body {
     background-image: url("../images/stadium2.jpg");
+    background-repeat: no-repeat;
+    height: 100%;
+    background-size: cover;
+
 }
 
 .header {
