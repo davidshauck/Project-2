@@ -99,6 +99,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
         populateUserTeam(function(data){
             // parse the data for use     
             data = JSON.parse(data);
+
             // function for determining if players have already been selected
             // Found it here https://www.geeksforgeeks.org/javascript-array-findindex-method/
             function isIncluded(element, index, array) {
@@ -112,23 +113,14 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 if ((compareUser < 0) && (compareComputer < 0)) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
-                // push the object to the user's team array
-                // userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
                  //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
-                console.log(playerIds);
                 // if kicker's value is null then make it $5
-                console.log("USER SALARY ADD BEFORE " + userSalary + "XX");
-                // if ((!userSalary) || (userSalary === "") || (userSalary === NaN)) {
-                //     userSalary = parseInt(5);
-                // }
-                console.log(data.Position);
                 if (data.Position === "K") {
                     userSalary = 5;
                 }
                 // push the object to the user's team array
                 userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, salary: userSalary});
-                console.log("USER SALARY ADD AFTER " + userSalary + "XX");
                 // subtract the value of the player from the user's budget
                 userBudget -= userSalary;
                 // update the budget div
@@ -162,6 +154,18 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 }
             // variable to hold the return value
             let comparePositionComputer = computerTeam.findIndex(isIncludedC);
+            // got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+            duplicatePlayer = computerTeam.filter(item => item.Position === data.Position).map(item => item.PlayerID)
+
+            // *** LEAVING THESE HERE IN CASE I NEED TO CHECK THIS STUFF AGAIN LATER
+            // console.log("COMPUTER TEAM LENGTH " + computerTeam.length)
+            // console.log("COMPARE USER B " + compareUserB);
+            // console.log("COMPARE COMPUTER B " + compareComputerB);
+            // console.log("COMPARE POSITION COMPUTER " + comparePositionComputer);
+            // console.log("PUSH COMPUTER " + pushComputer);
+            // console.log("DUPLICATE PLAYER LENGTH " + duplicatePlayer.length);
+            // console.log(computerTeam);
+            // console.log(duplicatePlayer);
 
             // check all conditions before pushing to computer's team
             if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2)) {
@@ -178,8 +182,9 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // update the budget div
                 $("#computer-budget").html("$" + computerBudget);
             };
-            //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
-            duplicatePlayer = computerTeam.filter(item => item.Position === data.Position).map(item => item.PlayerID)
+            // clear the array each time through
+            duplicatePlayer = [];
+            // not sure I'm using this check but am leaving it here just in case
             containsQB = computerTeam.filter(item => item.Position === "QB").map(item => item.PlayerID)
             // render the team after all these checks
             renderComputerTeam();
@@ -263,7 +268,7 @@ if (playerIdIndex > 15) {
 }
     // function for grabbing the top 15 players and storing their player IDs in an array (got this from Stack Overflow)
     function getPlayerIds() {
-        console.log("WEEK " + week)
+
         let queryUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week +"/" + position + "/FantasyPoints?key=87259770c8654c4aa8d0dd12658e7d93";
 
         return $.ajax(queryUrl)
@@ -279,13 +284,11 @@ if (playerIdIndex > 15) {
         // loop through that array and push them to a new playerIds array
         playerIds = []; // need to clear it out each loop through
         for (let i = 0; i < 15; i++) {
-            // console.log(playerArray[i].YahooSalary);
+            // if the salary is null make it $5
             if (!playerArray[i].YahooSalary) {
-                playerArray[i].YahooSalary =5;
+                playerArray[i].YahooSalary = 5;
             }
-            console.log(playerIds);
-            console.log(userTeam);
-            // console.log(playerArray[i].YahooSalary);
+            // push needed info into the playerIds object
             playerIds.push({Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary})
         }
             // stop at the top 15
@@ -351,7 +354,7 @@ if (playerIdIndex > 15) {
                 // add the placeholder if the team hasn't filled out all players yet
                 userImages.attr("src", "./images/player_placeholder.jpg");
                 userImages.css({ width: "128px", height: "177px"})
-                userPlayerName = "   ";
+                userPlayerName = "";
             // poulate with image and player name if a player has been selected
             } else {
                 userImages.attr("src", userTeam[i].url);
@@ -391,7 +394,7 @@ if (playerIdIndex > 15) {
             if (i >= computerTeam.length) {
                 computerImages.attr("src", "./images/player_placeholder.jpg");
                 computerImages.css({ width: "128px", height: "177px"})
-                computerPlayerName = "   ";
+                computerPlayerName = "";
             // poulate with image and player name if a player has been selected
             } else {
                 computerImages.attr("src", computerTeam[i].url);
@@ -413,7 +416,7 @@ if (playerIdIndex > 15) {
         }; // end of loop
 
         // once both teams have 6 players, enable the submit button
-        if ((userTeam.length >= 5) && (computerTeam.length >=5)) {
+        if ((userTeam.length >= 5) && (computerTeam.length >= 5)) {
             $(".submit-button").prop("disabled", false);
         } else {
             $(".submit-button").prop("disabled", true);
