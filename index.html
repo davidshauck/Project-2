@@ -65,14 +65,14 @@
         </nav>
     </div>
     <!-- container that holds instructions dropdown -->
-    <div class="col-4">
+    <div class="col-4" style="z-index: 100">
         <div id="main-title">
           <!-- instructions dropdown -->
           <div class="instructions" style="z-index: 100">HOW TO PLAY
             <p id="instructions-text">Start by picking a player. After each selection 
-              the computer will make a pick. You can remove a player 
-              by clicking on his name. After each team has
-              6 players, click submit to see how you did!
+              the computer will make a pick. You can remove one of your own players 
+              by clicking on his name, but the computer will retain its corresdponding pick. 
+              After each team has 6 players, click submit to see how you did!
           </div>
         </div> 
     </div>
@@ -95,7 +95,7 @@
                 <!-- this is where the team name goes -->
               </div>
                 <div id="user-budget">
-                  <!-- this is where the user budget goes -->
+                  $150<!-- this is where the user budget goes -->
                 </div>
               <div id="player-image-grid">
                 <!-- div where player images are rendered -->
@@ -104,7 +104,7 @@
             <div class="col-5">
               <div class="computer-title">The Computer</div>
                 <div id="computer-budget">
-                  <!-- this is where the computer budget goes -->
+                  $150<!-- this is where the computer budget goes -->
                 </div>
               <div id="computer-image-grid">
                 <!-- div where computer images are rendered -->
@@ -120,7 +120,7 @@
         <!-- position dropdown -->
         <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
           <div class="dropdown">
-            <div class="dropdown show">
+            <div class="dropup show">
               <a class="btn dropdown-toggle" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Position</a>
               <div class="dropdown-menu position-list" aria-labelledby="dropdownMenuLink">
               <!-- this is where the positions dropdown dynamically populates-->
@@ -131,7 +131,7 @@
         <!-- player dropdown-->
         <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
           <div class="dropdown">
-            <div class="dropdown show">
+            <div class="dropup show">
               <a class="btn dropdown-toggle player-button" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Player</a>
               <div class="dropdown-menu drop-test" aria-labelledby="dropdownMenuLink">
                 <!-- this div is where the player dropdown dynamically populates-->

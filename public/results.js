@@ -62,7 +62,7 @@ let resultsTable = [
     }
 ];
 
-let week = "99"; // this will eventually pull fromt he table
+let week = "";
 let playerId = "";
 let computerId = "";
 let userScore = 0;
