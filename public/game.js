@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+// set up universal variables
 let playerArray = [];
 let playerIdIndex = 0;
 let playerIds = [];
@@ -20,9 +21,9 @@ let computerPlayerName = "";
 let userPlayerName = "";
 let dataPosition = "";
 let userSalary;
+let userEmail = "test@test.com"; // this will be populated from the login info
 let userName = "Team Rodney"; // this will be dynamic once we create the login process
 let week = parseInt([Math.floor(Math.random()*17)]);
-
 
 // run all the necessary functions to get the game loaded
 renderUserTeam();
@@ -35,6 +36,7 @@ $(".instructions").click(function() {
     $("p#instructions-text").slideToggle(); 
 });
 
+// main game function
 function start() {
 // populate the team name div
 $(".user-title").html(userName);
@@ -121,7 +123,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
                     userSalary = 5;
                 }
                 // push the object to the user's team array
-                userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, salary: userSalary});
+                userTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, salary: userSalary, email: userEmail});
                 // subtract the value of the player from the user's budget
                 userBudget -= userSalary;
                 // update the budget div
@@ -171,7 +173,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // check all conditions before pushing to computer's team
             if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (userBudget > 0)) {
                 // if met, push
-                computerTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
+                computerTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, userEmail: email});
                 //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // change null to $5
@@ -241,8 +243,8 @@ start();
     renderPositionDropdown();
     renderUserTeam();
     start();
-});
 
+}); // end of user selection click function
 
 // function for calling on API that gets the player image
 function getImage(cb){
@@ -424,7 +426,7 @@ if (playerIdIndex > 15) {
             $(".submit-button").prop("disabled", true);
         }
 
-    } // end of render function
+    } // end of render computer team function
 
 // submit button function
 $(document.body).on("click", ".submit-button", function(e) {
@@ -479,6 +481,6 @@ function renderPositionDropdown() {
     }
         $(".position-list").append(qbBtn).append(rb1Btn).append(rb2Btn).append(wr1Btn).append(wr2Btn).append(kickBtn);
     
-    } // end position dropdown loop
+    } // end of render position dropdown loop
 
 });
