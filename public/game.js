@@ -108,9 +108,10 @@ $(document.body).on("click", "div.position-list button", function(e) {
                 // variables for the return of the function to determine if players are already on teams
                 let compareUser = userTeam.findIndex(isIncluded);
                 let compareComputer = computerTeam.findIndex(isIncluded);
-
+                console.log("USER BUDGET " + userBudget);
+                userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // if player is not yet on either team (its index would be -1, thus the < 0 to determine if it's in the array)
-                if ((compareUser < 0) && (compareComputer < 0)) {
+                if ((compareUser < 0) && (compareComputer < 0) && ((userBudget - userSalary) > 0)) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
                  //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
@@ -168,7 +169,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // console.log(duplicatePlayer);
 
             // check all conditions before pushing to computer's team
-            if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2)) {
+            if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (userBudget > 0)) {
                 // if met, push
                 computerTeam.push({week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position});
                 //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
@@ -205,7 +206,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
 start();
 
     // function for removing the players from the team
-    $(document.body).on("click","#player-name", function(e) {
+    $(document.body).on("click","#user-player-name", function(e) {
         e.preventDefault()
         // set a variable for the clicked image
         deleteRecord = ($(this).text().trim());
@@ -354,7 +355,7 @@ if (playerIdIndex > 15) {
                 // add the placeholder if the team hasn't filled out all players yet
                 userImages.attr("src", "./images/player_placeholder.jpg");
                 userImages.css({ width: "128px", height: "177px"})
-                userPlayerName = "";
+                userPlayerName = "PLAYER " + (i+1);
             // poulate with image and player name if a player has been selected
             } else {
                 userImages.attr("src", userTeam[i].url);
@@ -365,7 +366,7 @@ if (playerIdIndex > 15) {
             };
             // append playyer name under the images
             let p = $("<p>").text(userPlayerName);
-            p.attr("id", "player-name");
+            p.attr("id", "user-player-name");
             p.attr("data-pos", dataPosition);
             $(userPlayerBox).append(userImages);
             $(userPlayerBox).append(p);
@@ -394,7 +395,7 @@ if (playerIdIndex > 15) {
             if (i >= computerTeam.length) {
                 computerImages.attr("src", "./images/player_placeholder.jpg");
                 computerImages.css({ width: "128px", height: "177px"})
-                computerPlayerName = "";
+                computerPlayerName = "PLAYER " + (i+1);
             // poulate with image and player name if a player has been selected
             } else {
                 computerImages.attr("src", computerTeam[i].url);
@@ -403,6 +404,7 @@ if (playerIdIndex > 15) {
             };
             // append playyer name under the images
             let p = $("<p>").text(computerPlayerName);
+            p.attr("id", "computer-player-name");
             $(computerPlayerBox).append(computerImages);
             $(computerPlayerBox).append(p);
             // append div to grid
@@ -416,22 +418,24 @@ if (playerIdIndex > 15) {
         }; // end of loop
 
         // once both teams have 6 players, enable the submit button
-        if ((userTeam.length >= 5) && (computerTeam.length >= 5)) {
+        if ((userTeam.length >= 6) && (computerTeam.length >= 6)) {
             $(".submit-button").prop("disabled", false);
         } else {
             $(".submit-button").prop("disabled", true);
         }
-        $(document.body).on("click", ".submit-button", function(e) {
-            e.preventDefault();
-            console.log("*******USER TEAM*********")
-            console.log(userTeam);
-            console.log("********************")
-            console.log("*****COMPUTER TEAM*******")
-            console.log(computerTeam);
-            console.log("********************")
-        });
 
     } // end of render function
+
+// submit button function
+$(document.body).on("click", ".submit-button", function(e) {
+    e.preventDefault();
+    console.log("*******USER TEAM*********")
+    console.log(userTeam);
+    console.log("********************")
+    console.log("*****COMPUTER TEAM*******")
+    console.log(computerTeam);
+    console.log("********************")
+});
 
 // function for rendering the positions dropdown
 function renderPositionDropdown() {

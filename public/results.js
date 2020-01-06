@@ -72,12 +72,6 @@ let computerScore = 0;
 $("#user-team").html(resultsTable[0].teamName);
 $("#week-number").html("<h1>WEEK " + week + "</h1>").css("style='z-index: -1");
 
-// // Rules button
-// $(".instructions").css("style='z-index: 100'"); 
-// $(".instructions").click(function() {
-//     $("p").slideToggle();
-// });
-
 // create the past games dropdown
 let weekDropdown = $("<a>");
 
@@ -91,9 +85,8 @@ for (let i = 0; i < resultsTable.length; i++) {
         weekDropdown.addClass("dropdown-item");
         weekDropdown.attr("data-id", resultsTable[i].week);
         weekDropdown.attr("id", "week"+i);
-        weekDropdown.html(resultsTable[i].week);
+        weekDropdown.html("WEEK " + resultsTable[i].week);
         weekDropdown.appendTo(".week-dropdown");
-
 }
 
 function populateTables() {

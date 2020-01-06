@@ -8,12 +8,7 @@ body {
     background-image: url("../images/stadium2.jpg");
     background-repeat: no-repeat;
     height: 100%;
-    background-size: cover;
-
-}
-
-.header {
-    height: 80px;
+    /* background-size: cover; */
 }
 
 #logo {
@@ -64,16 +59,30 @@ p#instructions-text {
     margin: 10px;
 }
 
-p#player-name {
+p#user-player-name {
     cursor: pointer;
     color: black;
-    font-size: 14px;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+p#computer-player-name {
+    color: black;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    white-space: nowrap;
+    text-align: center;
 }
 
 #player-image {
     width: 88%;
     text-align: center;
     padding-bottom: 0px;
+    padding-top: 23px;
 }
 
 .user-title {
@@ -133,7 +142,6 @@ p#player-name {
 }
 
 #computer-team {
-    padding: 10px 20px 10px 10px;
     font-size: 28px;
     font-weight: bold;
     line-height: 10px;
@@ -143,7 +151,6 @@ p#player-name {
 }
 
 #user-team {
-    padding: 10px 10px 10px 20px;
     font-size: 28px;
     font-weight: bold;
     line-height: 10px;
@@ -152,17 +159,11 @@ p#player-name {
     display: block;
 }
 
-.table {
-    padding: 30px 30px 0px 30px;
-    margin: 0px
-}
-
 #week-number {
     text-align: center;
     background-color: #fbae17;
     color: white;
     padding: 10px;
-    z-index: -1;
 }
 
 .position-list {
@@ -172,16 +173,13 @@ p#player-name {
     border: none;
     cursor: pointer;
     width: 100%;
-    /* height: auto;
-    max-height: 200px;
-    overflow-x: hidden; */
 }
 
 .drop-test {
     height: auto;
-    max-height: 550px;
+    max-height: 600px;
     overflow-x: hidden;
-    width: 50%;
+    width: 55%;
 }
 
 .submit-button {
@@ -191,6 +189,10 @@ p#player-name {
     font-size: 16px;
     border: none;
     width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #ce8b05;
 }
 
 .button-row {
@@ -250,7 +252,7 @@ p#player-name {
     font-size: 16px;
     border: none;
     cursor: pointer;
-    width: 90%;
+    width: 50%;
 }
 
 /* navigation styles */
@@ -278,3 +280,11 @@ a:hover {
     float: left;
     color: white;
 } 
+
+@media screen and (max-width: 1130px) {
+
+    #tagline {
+        display: none;
+    }
+
+}
