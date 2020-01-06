@@ -11,6 +11,10 @@ body {
     /* background-size: cover; */
 }
 
+.header {
+    height: 75px;
+}
+
 #logo {
     width: 120%;
     margin-top: 12px;
@@ -164,6 +168,7 @@ p#computer-player-name {
     background-color: #fbae17;
     color: white;
     padding: 10px;
+    z-index: -1;
 }
 
 .position-list {
@@ -232,6 +237,7 @@ p#computer-player-name {
 .matchup-grid {
     background-color: white;
     padding: 10px;
+    z-index: -1;
 }
 .matchup-grid-bottom {
     background-color: white;
