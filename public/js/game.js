@@ -24,7 +24,7 @@ let userSalary;
 let gameObject = {};
 let userEmail = "test@test.com"; // this will be populated from the login info
 let teamName = "Team Rodney"; // this will be dynamic once we create the login process
-let week = parseInt([Math.floor(Math.random()*17)]);
+let week = parseInt([Math.floor(Math.random()*17)]); // creates a random week on every new game
 
 // run all the necessary functions to get the game loaded
 renderUserTeam();
@@ -37,7 +37,7 @@ $(".instructions").click(function() {
     $("p#instructions-text").slideToggle(); 
 });
 
-// main game function
+// main game function, this starts the cycle every time a new player is being picked
 function start() {
 // populate the team name div
 $(".user-title").html(teamName);
@@ -65,7 +65,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
     renderPositionDropdown();
     // callback function for getting player IDs from API
     getPlayerIds().then(getPlayerInfo).then(function(data) {
-    // set random computer player for later use (the *20 picks top 20 players; can be changed)
+    // set random computer player for later use (the *20 picks top 20 players per position; can be changed)
     computerPlayer = playerArray[Math.floor(Math.random()*20)].PlayerID;
     // create dynamic list of players for user to choose from
     let playerDropdown = $("<a>");
@@ -76,7 +76,7 @@ $(document.body).on("click", "div.position-list button", function(e) {
         playerDropdown.addClass("player-dropdown");
         playerDropdown.attr("data-id", playerArray[i].PlayerID);
         playerDropdown.attr("id", "dd"+i);
-        // the kickers didn't have draft values so I made them all $5
+        // for some reason the kickers didn't have draft values, so I made them all $5
         if (!playerArray[i].YahooSalary) {
             playerArray[i].YahooSalary = parseInt(5);
         } 
@@ -104,20 +104,20 @@ $(document.body).on("click", "div.position-list button", function(e) {
             data = JSON.parse(data);
 
             // function for determining if players have already been selected
-            // Found it here https://www.geeksforgeeks.org/javascript-array-findindex-method/
+            // found it here https://www.geeksforgeeks.org/javascript-array-findindex-method/
             function isIncluded(element, index, array) {
                 return (element.PlayerID === data.PlayerID);
                 }
                 // variables for the return of the function to determine if players are already on teams
                 let compareUser = userTeam.findIndex(isIncluded);
                 let compareComputer = computerTeam.findIndex(isIncluded);
-                console.log("USER BUDGET " + userBudget);
+                // got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // if player is not yet on either team (its index would be -1, thus the < 0 to determine if it's in the array)
-                if ((compareUser < 0) && (compareComputer < 0) && ((userBudget - userSalary) > 0)) {
+                if ((compareUser < 0) && (compareComputer < 0) && ((userBudget - userSalary) >= 0)) {
                 // change the push boolean to true so it will push to computer team
                 pushComputer = true;
-                 //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+                // got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                 userSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
                 // if kicker's value is null then make it $5
                 if (data.Position === "K") {
@@ -161,16 +161,6 @@ $(document.body).on("click", "div.position-list button", function(e) {
             // got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
             duplicatePlayer = computerTeam.filter(item => item.Position === data.Position).map(item => item.PlayerID)
 
-            // *** LEAVING THESE HERE IN CASE I NEED TO CHECK THIS STUFF AGAIN LATER
-            // console.log("COMPUTER TEAM LENGTH " + computerTeam.length)
-            // console.log("COMPARE USER B " + compareUserB);
-            // console.log("COMPARE COMPUTER B " + compareComputerB);
-            // console.log("COMPARE POSITION COMPUTER " + comparePositionComputer);
-            // console.log("PUSH COMPUTER " + pushComputer);
-            // console.log("DUPLICATE PLAYER LENGTH " + duplicatePlayer.length);
-            // console.log(computerTeam);
-            // console.log(duplicatePlayer);
-
             // check all conditions before pushing to computer's team
             if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (userBudget >= 0)) {
                 // if met, push
@@ -188,64 +178,65 @@ $(document.body).on("click", "div.position-list button", function(e) {
             };
             // clear the array each time through
             duplicatePlayer = [];
-            // not sure I'm using this check but am leaving it here just in case
+            // not sure I'm using this but am leaving it here just in case
             containsQB = computerTeam.filter(item => item.Position === "QB").map(item => item.PlayerID)
             // render the team after all these checks
             renderComputerTeam();
    
-        });  // end of populate function 
+            });  // end of populate function 
+
+        }); // end of click function
+
+        // empty the player array
+        playerArray = [];
+    
+        }); // end of the populate callback function
 
     }); // end of click function
-
-    // empty the player array
-    playerArray = [];
-    
-    }); // end of callback function
-}); // end of click function
     
 }; // end of start() function
 
 // call the start function to begin the game 
 start();
 
-    // function for removing the players from the team
-    $(document.body).on("click","#user-player-name", function(e) {
-        e.preventDefault()
-        // set a variable for the clicked image
-        deleteRecord = ($(this).text().trim());
+// function for removing the players from the team
+$(document.body).on("click","#user-player-name", function(e) {
+    e.preventDefault()
+    // set a variable for the clicked image
+    deleteRecord = ($(this).text().trim());
 
-        //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
-        userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
-        // if the player is a kicker set the salary to $5
-        if ($(this).attr("data-pos") === "K") {
-            userSalary = 5;
+    //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
+    userSalary = playerIds.filter(item => item.Name === deleteRecord).map(item => item.YahooSalary)
+    // if the player is a kicker set the salary to $5
+    if ($(this).attr("data-pos") === "K") {
+        userSalary = 5;
+    }
+    // add the deleted salary back to the budget;
+    userBudget += parseInt(userSalary);
+
+    // loop through the user's team to find the corresponding player and splice it out
+    for (let i = 0; i < userTeam.length; i++){ 
+        if (userTeam[i].name === deleteRecord) {
+            userTeam.splice(i, 1); 
         }
-        // add the deleted salary back to the budget;
-        userBudget += parseInt(userSalary);
-   
-        // loop through the user's team to find the corresponding player and splice it out
-        for (let i = 0; i < userTeam.length; i++){ 
-            if (userTeam[i].name === deleteRecord) {
-              userTeam.splice(i, 1); 
-            }
-        }
-        // reset the budget and loop through to subtract the player salaries in the array
+    }
+    // reset the budget and loop through to subtract the player salaries in the array
+    userBudget = 150;
+    for (let i = 0; i < userTeam.length; i++) {
+        userBudget -= userTeam[i].salary;   
+    }
+    // when array has 0 objects reset the budget back to $150
+    if (userTeam.length === 0) {
         userBudget = 150;
-        for (let i = 0; i < userTeam.length; i++) {
-            userBudget -= userTeam[i].salary;   
-        }
-        // when array has 0 objects reset the budget back to $150
-        if (userTeam.length === 0) {
-            userBudget = 150;
-        }
-         $("#user-budget").html("$" + userBudget);
+    }
+        $("#user-budget").html("$" + userBudget);
 
     // update the team grid
     renderPositionDropdown();
     renderUserTeam();
     start();
 
-}); // end of user selection click function
+}); // end of remove player click function
 
 // function for calling on API that gets the player image
 function getImage(cb){
@@ -435,17 +426,6 @@ $(document.body).on("click", ".submit-button", function(e) {
 
     gameObject = {user: userTeam, computer: computerTeam};
 
-    console.log("*******GAME OBJECT*********")
-    console.log(gameObject);
-    console.log("********************")
-    
-    console.log("*******USER TEAM*********")
-    console.log(userTeam);
-    console.log("********************")
-    // console.log("*****COMPUTER TEAM*******")
-    // console.log(computerTeam);
-    // console.log("********************")
-
     submitGame(gameObject);
 
 });
@@ -498,7 +478,7 @@ function renderPositionDropdown() {
 // Submits a new post and brings user to blog page upon completion
   function submitGame(Post) {
     $.post("/api/submit/", Post, function() {
-    //   window.location.href = "/results";
+      window.location.href = "/results";
     });
   }
 
