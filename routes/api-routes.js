@@ -51,7 +51,8 @@ module.exports = function(app) {
         url6: req.body.user[5].url,
         playerName6: req.body.user[5].name
     })
-        .then(function() {
+        .then(function(r) {
+
           db.ComputerGame.create({
             week: req.body.computer[0].week,
             teamName: req.body.computer[0].teamName,
@@ -76,7 +77,7 @@ module.exports = function(app) {
             playerName6: req.body.computer[5].name
         })
             .then(function(dbResults) {
-                res.json(dbResults);
+                res.json([r,dbResults]);
             });
         });
 
