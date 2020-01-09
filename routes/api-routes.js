@@ -8,21 +8,40 @@
 // Requiring our Todo model
 var db = require("../models");
 
+db.UserGame.belongsTo(db.ComputerGame, {targetKey:'gameId', foreignKey:'gameId'});
+
+
 // Routes
 // =============================================================
 module.exports = function(app) {
 
   // GET route for getting all of the results
   app.get("/api/results/", function(req, res) {
-    db.UserGame.findAll({})
-      .then(function(dbResults) {
-        res.json(dbResults);
-      });
-    db.ComputerGame.findAll({})
-    .then(function(dbResults) {
-    res.json(dbResults);
-      });
-  });
+
+    db.UserGame.findAll({
+      include: [
+        {
+          model: db.ComputerGame,
+          where: {
+              email: "test@test.com"
+          }
+      }]
+
+
+
+
+    // db.UserGame.findAll({})
+    //   .then(function(dbResults) {
+    //     res.json(dbResults);
+    //   });
+    // db.ComputerGame.findAll({})
+    // .then(function(dbResults) {
+    // res.json(dbResults);
+    //   });
+  }).then(function(results){
+    res.json(results);
+});
+});
 
   // POST route for saving a new post
   app.post("/api/submit", function(req, res) {
@@ -51,7 +70,10 @@ module.exports = function(app) {
         url6: req.body.user[5].url,
         playerName6: req.body.user[5].name
     })
-        .then(function(r) {
+  //   .then(function(dbResults) {
+  //     res.json(dbResults);
+  // });
+        .then(function() {
 
           db.ComputerGame.create({
             week: req.body.computer[0].week,
@@ -77,7 +99,7 @@ module.exports = function(app) {
             playerName6: req.body.computer[5].name
         })
             .then(function(dbResults) {
-                res.json([r,dbResults]);
+                res.json(dbResults);
             });
         });
 
