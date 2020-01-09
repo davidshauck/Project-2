@@ -103,30 +103,12 @@ let joinedResults = [
 ]
     
     
-    
-  
-    
-    // this object will be all games played by the current logged-in user. It will come from the SQL table.
-    // let usersTable = [
-    //     {
-    //         email: "test@test.com", teamName: "Team Rodney"
-    //     },
-    //     {
-    //         email: "test@test.com", teamName: "Team Rodney"
-    //     },
-    //     {
-    //         email: "test@test.com", teamName: "Team Rodney"
-    //     },
-    //     {
-    //         email: "test@test.com", teamName: "Team Rodney"
-    //     }
-    // ];
-    
     let week = joinedResults[1].week;
     let playerId = "";
     let computerId = "";
     let userScore = 0;
     let computerScore = 0;
+
     
     // dynamically populate the table with whatever user name is coming from the SQL table
     $("#user-team").html(joinedResults[1].teamName);
@@ -198,10 +180,10 @@ let joinedResults = [
             info = JSON.parse(info);
     
             let computerRow = $("<tr id='user-row" + i + "'>").append(
-                $("<td><img src='" + joinedResults[1].ComputerGame["url"+i] + "' style='width: 40px'>"),
-                $("<td style='text-align: left'>").addClass("table-text").text(info.Name),
+                $("<td>").addClass("table-points").text(info.FantasyPoints),
                 $("<td>").text(" "),
-                $("<td>").addClass("align-right table-points").text(info.FantasyPoints)
+                $("<td style='text-align: right'>").addClass("table-text").text(info.Name),
+                $("<td><img src='" + joinedResults[1].ComputerGame["url"+i] + "' style='width: 40px'>").addClass("align-right"),
                 );
                 $("#current-computer-results > tbody").append(computerRow);
     
