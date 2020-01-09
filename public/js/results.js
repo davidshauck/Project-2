@@ -248,63 +248,11 @@ let joinedResults = [
     
         function gameResults(data) {
             joinedResults = data;
-            $("tbody").empty();
-            populateTables();
+            // $("tbody").empty();
+            // populateTables();
            console.log(joinedResults);
           }
           
-        //   let userTestScores = 
-        //   {
-        //       gameId: 1, 
-        //       week: 2, 
-        //       teamName: "Team Rodney",
-        //       email: "test@test.com",
-        //       playerName1: "Tom Brady HARDCODE",
-        //       PlayerID1: 4314,
-        //       url1: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/4314.png",
-        //       playerName2: "Dalvin Cook HARDCODE",
-        //       PlayerID2: 18872,
-        //       url2: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18872.png",
-        //       playerName3: "Aaron Jones HARDCODE",
-        //       PlayerID3: 19045,
-        //       url3: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19045.png",
-        //       playerName4: "Emmanuel Sanders HARDCODE",
-        //       PlayerID4: 11063,
-        //       url4: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11063.png",
-        //       playerName5: "Kenny Golladay HARDCODE",
-        //       PlayerID5: 18977,
-        //       url5: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18977.png",
-        //       playerName6: "Austin Seibert HARDCODE",
-        //       PlayerID6: 21114,
-        //       url6: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/21114.png"
-       
-        //   };
-      
-        //   let computerTestScores = 
-        //   {
-        //       gameId: 1, 
-        //       week: 2, 
-        //       teamName: "Team Rodney",
-        //       email: "test@test.com",
-        //       playerName1: "Tom Brady HARDCODE",
-        //       PlayerID1: 4314,
-        //       url1: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/4314.png",
-        //       playerName2: "Dalvin Cook HARDCODE",
-        //       PlayerID2: 18872,
-        //       url2: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18872.png",
-        //       playerName3: "Aaron Jones HARDCODE",
-        //       PlayerID3: 19045,
-        //       url3: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/19045.png",
-        //       playerName4: "Emmanuel Sanders HARDCODE",
-        //       PlayerID4: 11063,
-        //       url4: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/11063.png",
-        //       playerName5: "Kenny Golladay HARDCODE",
-        //       PlayerID5: 18977,
-        //       url5: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/18977.png",
-        //       playerName6: "Austin Seibert HARDCODE",
-        //       PlayerID6: 21114,
-        //       url6: "https://s3-us-west-2.amazonaws.com/static.fantasydata.com/headshots/nfl/low-res/21114.png"
-       
-        //   };
+
     
     });

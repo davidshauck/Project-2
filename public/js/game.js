@@ -22,7 +22,7 @@ $(document).ready(function() {
     let dataPosition = "";
     let userSalary;
     let gameObject = {};
-    let userEmail = "test@test.com"; // this will be populated from the login info
+    let userEmail = "dave@dave.com"; // this will be populated from the login info
     let teamName = "Team Rodney"; // this will be dynamic once we create the login process
     let week = parseInt([Math.floor(Math.random()*17)]); // creates a random week on every new game
     
