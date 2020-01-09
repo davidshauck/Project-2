@@ -1,0 +1,296 @@
+* {
+    box-sizing: border-box;
+}
+
+/* universal styles */
+
+body {
+    background-image: url("../images/stadium2.jpg");
+    background-repeat: no-repeat;
+    height: 100%;
+    background-size: cover;
+}
+
+.header {
+    height: 75px;
+}
+
+#logo {
+    width: 120%;
+    margin-top: 12px;
+    padding-right: 30px;
+}
+
+#tagline {
+    color: #fbae17;
+    padding-top: 18px;
+    text-align: right;
+    font-size: 24px;
+}
+
+#main-title {
+    float: left;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+    text-align: center;
+    background-color: #fbae17;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: sans-serif;
+    margin: 0px;
+    border-radius: 0px 0px 10px 10px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.align-right {
+    text-align: right;
+}
+
+p#instructions-text {
+    display: none;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+}
+
+/* game styles */
+
+.images {
+    width: 126px;
+    text-align: center;
+    margin: 10px;
+}
+
+p#user-player-name {
+    cursor: pointer;
+    color: black;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+p#computer-player-name {
+    color: black;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#player-image {
+    width: 88%;
+    text-align: center;
+    padding-bottom: 0px;
+    padding-top: 23px;
+}
+
+.user-title {
+    padding: 10px 0px 0px 0px;
+    font-size: 30px;
+    line-height: 50px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.computer-title {
+    padding: 10px 0px 0px 0px;
+    font-size: 30px;
+    line-height: 50px;
+    display: block;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+#user-budget {
+    padding: 10px;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 10px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+#user-points {
+    float: right;
+    padding: 10px 30px 10px 10px;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 10px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+#computer-budget {
+    padding: 10px;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 10px;
+    margin-bottom: 5px;
+    text-align: right;
+    display: block;
+}
+
+#computer-points {
+    padding: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    display: block;
+}
+
+#computer-team {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 10px;
+    margin-bottom: 5px;
+    text-align: right;
+    display: block;
+}
+
+#user-team {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+    display: block;
+}
+
+#week-number {
+    text-align: center;
+    background-color: #fbae17;
+    color: white;
+    padding: 10px;
+    z-index: -1;
+}
+
+.position-list {
+    background-color: lightgray;
+    color: black;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.drop-test {
+    height: auto;
+    max-height: 600px;
+    overflow-x: hidden;
+    width: 55%;
+}
+
+.submit-button {
+    background-color: #fbae17;
+    color: white;
+    padding: 11px;
+    font-size: 16px;
+    border: none;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #ce8b05;
+}
+
+.button-row {
+    padding: 10px;
+}
+
+#dropdownMenuLink {
+    width: 100%;
+    padding: 10px;
+}
+
+.modal-title {
+    font-size: 24px;
+}
+
+.modal-body {
+    font-size: 18px;
+}
+
+/* results styles (a couple may be shared with the game) */
+
+.table-text {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.table-points {
+    font-size: 22px;
+    vertical-align: middle;
+}
+
+.results-grid {
+    background-color: white;
+    padding: 0px;
+}
+
+.matchup-grid {
+    background-color: white;
+    padding: 10px;
+    z-index: -1;
+}
+.matchup-grid-bottom {
+    background-color: white;
+    padding: 10px 0px 20px 0px;
+    border-radius: 0px 0px 10px 10px;
+    margin-bottom: 20px;
+}
+
+.dropdown-item {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ffffff;
+}
+
+.week-dropdown {
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 50%;
+}
+
+/* navigation styles */
+
+ul {
+    padding: 15px;
+}
+  
+li {
+    padding: 0px 0px 0px 20px;
+}
+  
+li a {
+    color: white;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+  
+a:hover {
+    color: grey;
+}
+
+.nav-item {
+    float: left;
+    color: white;
+} 
+
+@media screen and (max-width: 1130px) {
+
+    #tagline {
+        display: none;
+    }
+
+}
