@@ -8,44 +8,41 @@
 // Requiring our Todo model
 var db = require("../models");
 
-db.UserGame.belongsTo(db.ComputerGame, {targetKey:'gameId', foreignKey:'gameId'});
-
+// ** THIS WORKS
+db.UserGame.belongsTo(db.Users, {targetKey:'email', foreignKey:'email'});
+db.Users.hasMany(db.UserGame, {targetKey:'email', foreignKey:'email'});
+db.ComputerGame.belongsTo(db.Users, {targetKey:'email', foreignKey:'email'});
+db.Users.hasMany(db.ComputerGame, {targetKey:'email', foreignKey:'email'});
 
 // Routes
 // =============================================================
 module.exports = function(app) {
 
-  // GET route for getting all of the results
+  // ** THIS WORKS WITH THE ABOVE COMMENTS
   app.get("/api/results/", function(req, res) {
 
-    db.UserGame.findAll({
+    db.Users.findAll({
       include: [
+        {
+          model: db.UserGame,
+          where: {
+              email: "dave@dave.com"
+          }
+        },
         {
           model: db.ComputerGame,
           where: {
-              email: "test@test.com"
+              email: "dave@dave.com"
           }
-      }]
-
-
-
-
-    // db.UserGame.findAll({})
-    //   .then(function(dbResults) {
-    //     res.json(dbResults);
-    //   });
-    // db.ComputerGame.findAll({})
-    // .then(function(dbResults) {
-    // res.json(dbResults);
-    //   });
-  }).then(function(results){
-    res.json(results);
-});
-});
+        }
+      ]
+      }).then(function(results){
+        res.json(results);
+    });
+  });
 
   // POST route for saving a new post
   app.post("/api/submit", function(req, res) {
-    console.log("Booooo")
     console.log(req.body);
     db.UserGame.create({
         week: req.body.user[0].week,
@@ -70,9 +67,6 @@ module.exports = function(app) {
         url6: req.body.user[5].url,
         playerName6: req.body.user[5].name
     })
-  //   .then(function(dbResults) {
-  //     res.json(dbResults);
-  // });
         .then(function() {
 
           db.ComputerGame.create({
