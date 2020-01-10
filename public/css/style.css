@@ -116,13 +116,14 @@ p#computer-player-name {
 }
 
 #user-points {
-    float: right;
+    float: left;
+    text-align: left;
     padding: 10px 30px 10px 10px;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     line-height: 10px;
     margin-bottom: 5px;
-    display: block;
+    /* display: block; */
 }
 
 #computer-budget {
@@ -137,7 +138,7 @@ p#computer-player-name {
 
 #computer-points {
     padding: 10px;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     line-height: 10px;
     margin-bottom: 5px;

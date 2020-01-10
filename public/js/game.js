@@ -23,11 +23,9 @@ $(document).ready(function () {
     let userSalary;
     let gameObject = {};
     let userEmail = "dave@dave.com"; // this will be populated from the login info
-    let teamName = "Team Rodney"; // this will be dynamic once we create the login process
-    let week = parseInt([Math.floor(Math.random() * 17)]); // creates a random week on every new game
-
-
-
+    let teamName = "Team Dave"; // this will be dynamic once we create the login process
+    let week = parseInt([Math.floor(Math.random()*17)]); // creates a random week on every new game
+    
     // run all the necessary functions to get the game loaded
     renderUserTeam();
     renderComputerTeam();
@@ -478,9 +476,9 @@ $(document).ready(function () {
 
 
     // Submits a new post and brings user to blog page upon completion
-    function submitGame(Post) {
-        $.post("/api/submit/", Post, function () {
-            //   window.location.href = "/results";
+      function submitGame(Post) {
+        $.post("/api/submit/", Post, function() {
+          window.location.href = "/results";
         });
     }
 
