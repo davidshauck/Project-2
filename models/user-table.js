@@ -29,22 +29,3 @@ module.exports = function(sequelize, DataTypes) {
   });
   return UserGame;
 };
-
-
-// THIS WORKS
-// module.exports = function(sequelize, DataTypes) {
-//   var UserGame = sequelize.define("UserGame", {
-//       gameId: {
-//         type: DataTypes.INTEGER,
-//         primaryKey: true,
-//         autoIncrement: true,
-//         },
-//       PlayerId: DataTypes.INTEGER,
-//       week: DataTypes.INTEGER,
-//       url: DataTypes.STRING,
-//       playerName: DataTypes.STRING,
-//       teamName: DataTypes.STRING,
-//       email: DataTypes.STRING
-//   });
-//   return UserGame;
-// };
