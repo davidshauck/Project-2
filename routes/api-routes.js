@@ -20,7 +20,7 @@ module.exports = function(app) {
 
   // ** THIS WORKS WITH THE ABOVE COMMENTS
   app.get("/api/results/", function(req, res) {
-
+    console.log('hitting api route results');
     db.Users.findAll({
       include: [
         {
