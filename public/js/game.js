@@ -430,6 +430,39 @@ $(document).ready(function () {
 
     });
 
+    $(document.body).on("click", ".submit-account", function (e) {
+        e.preventDefault();
+
+        let newAccount = 
+            {
+            usernamesignup: $("#name").val(),
+            emailsignup: $("#email").val(),
+            passwordsignup: $("#password").val()
+            };
+
+        
+        // console.log(newAccount);
+
+        submitAccount(newAccount);
+
+    });
+
+    $(document.body).on("click", ".submit-login", function (e) {
+        e.preventDefault();
+
+        let loginCredentials = 
+            {
+            email: $("#email-login").val(),
+            password: $("#password-login").val()
+            };
+
+        
+        // console.log(newAccount);
+
+        submitLogin(loginCredentials);
+
+    });
+
     // function for rendering the positions dropdown
     function renderPositionDropdown() {
         $(".position-list").empty();
@@ -481,5 +514,21 @@ $(document).ready(function () {
           window.location.href = "/results";
         });
     }
+
+        // Submits a new account
+        function submitAccount(Post) {
+            $.post("/api/user/create/", Post, function() {
+            //   window.location.href = "/results";
+            alert("success")
+            });
+        }
+
+                // Submits login
+                function submitLogin(Post) {
+                    $.post("/api/user/", Post, function() {
+                    //   window.location.href = "/results";
+                    alert("success")
+                    });
+                }
 
 });

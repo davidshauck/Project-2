@@ -64,12 +64,7 @@
     <div class="col-4" style="z-index: 100">
         <div id="main-title">
           <!-- instructions dropdown -->
-          <div class="instructions">HOW TO PLAY
-            <p id="instructions-text">Start by picking a position, then a player. After each selection 
-              the computer will make a pick. You can remove your own players 
-              by clicking on their name, but the computer will retain its corresdponding pick. 
-              After each team has 6 players, click submit to see how you did!
-              Keep in mind: You must stay within budget.
+          <div class="instructions">Log in
           </div>
         </div> 
     </div>
@@ -83,66 +78,21 @@
     </div>
   </div>
 
-  <!-- main container -->
-    <div class="container matchup-grid">
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-5">
-              <div class="user-title">
-                <!-- this is where the team name goes -->
-              </div>
-                <div id="user-budget">
-                  $150<!-- this is where the user budget goes -->
-                </div>
-              <div id="player-image-grid">
-                <!-- div where player images are rendered -->
-              </div> 
-            </div>
-            <div class="col-5">
-              <div class="computer-title">The Computer</div>
-                <div id="computer-budget">
-                  $150<!-- this is where the computer budget goes -->
-                </div>
-              <div id="computer-image-grid">
-                <!-- div where computer images are rendered -->
-              </div> 
-            </div>
-            <div class="col-1"></div>
+    <form action="/login" method="POST" role="form">
+      <div class="form-group">
+        <label for="name">Email:</label>
+        <input type="text" class="form-control" name="email" id="email-login" required>
         </div>
-    </div>
-    <!-- buttons -->
-    <div class="container matchup-grid-bottom">
-      <div class="row button-row">
-        <div class="col-lg-1 col-md-1 col-sm-0 col-xs-0"></div>
-        <!-- position dropdown -->
-        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
-          <div class="dropdown">
-            <div class="dropup show">
-              <a class="btn dropdown-toggle" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Position</a>
-              <div class="dropdown-menu position-list" aria-labelledby="dropdownMenuLink">
-              <!-- this is where the positions dropdown dynamically populates-->
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- player dropdown-->
-        <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
-          <div class="dropdown">
-            <div class="dropup show">
-              <a class="btn dropdown-toggle player-button" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Player</a>
-              <div class="dropdown-menu drop-test" aria-labelledby="dropdownMenuLink">
-                <!-- this div is where the player dropdown dynamically populates-->
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- submit button -->
-        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
-            <input class="btn btn-block submit-button drop-test" type="submit" value="Submit">
-        </div>
-        <div class="col-lg-1 col-md-1 col-sm-0 col-xs-0"></div>
+      <div class="form-group">
+      <label>Password:</label>
+      <input type="password" class="form-control" name="password" id="password-login" required>
       </div>
-    </div>
+
+      <div>
+				<input type="submit" class="submit-login" value="Log in"/>
+			</div>
+    </form>
+
 
     <!-- external js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

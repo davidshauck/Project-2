@@ -22,6 +22,14 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, "../public/game.html"));
   });
 
+  app.get("/account", function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/create-account.html"));
+  });
+
+  app.get("/login", function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/login.html"));
+  });
+
   // If no matching route is found default to home page, here header
   app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "../public/index.html"));

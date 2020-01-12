@@ -4,9 +4,9 @@
 // ******************************************************************************
 // *** Dependencies
 // =============================================================
-var express = require("express");
-
-// var bodyParser = require('body-parser')
+const express = require("express");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 // Sets up the Express App
 // =============================================================
@@ -19,9 +19,6 @@ var db = require("./models");
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(bodyParser.text());
 
 // Static directory
 app.use(express.static("public"));

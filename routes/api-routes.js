@@ -5,8 +5,11 @@
 // Dependencies
 // =============================================================
 
-// Requiring our Todo model
+// Requiring our models
 var db = require("../models");
+
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // ** THIS WORKS
 db.UserGame.belongsTo(db.Users, {targetKey:'email', foreignKey:'email'});
@@ -17,6 +20,51 @@ db.Users.hasMany(db.ComputerGame, {targetKey:'email', foreignKey:'email'});
 // Routes
 // =============================================================
 module.exports = function(app) {
+
+  //register: storing name, email and password and redirecting to home page after signup
+  app.post('/api/user/create/', function (req, res) {
+    console.log(req.body);
+    bcrypt.hash(req.body.passwordsignup, saltRounds, function (err, hash) {
+   db.BcryptUser.create({
+    email: req.body.emailsignup,
+     name: req.body.usernamesignup,
+     password: hash
+     }).then(function(data) {
+      if (data) {
+      res.redirect('/index');
+      }
+    });
+   });
+  });
+
+  //login page: storing and comparing email and password,and redirecting to home page after login
+  app.post('/api/user/', function (req, res) {
+    console.log(req.body);
+
+    db.BcryptUser.findOne({
+         where: {
+             email: req.body.email
+                }
+    }).then(function (user) {
+        if (!user) {
+          console.log("NOPE")
+           res.redirect('/index');
+        } else {
+bcrypt.compare(req.body.password, user.password, function (err, result) {
+       if (result == true) {
+         console.log("MATCH")
+           res.redirect('/play');
+       } else {
+         console.log("Incorrect passwrod")
+        res.send('Incorrect password');
+        res.redirect('/index');
+       }
+     });
+    }
+ });
+});
+
+
 
   // ** THIS WORKS WITH THE ABOVE COMMENTS
   app.get("/api/results/", function(req, res) {
