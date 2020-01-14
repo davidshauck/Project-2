@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  let Users = sequelize.define("Users", {
+  let Usersxx = sequelize.define("Usersxxx", {
         email: {
             type: DataTypes.STRING,
             primaryKey: true
@@ -7,5 +7,5 @@ module.exports = function(sequelize, DataTypes) {
         pw: DataTypes.STRING,
         team_name: DataTypes.STRING
   });
-  return Users;
+  return Usersxx;
 };

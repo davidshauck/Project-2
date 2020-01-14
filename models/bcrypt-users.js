@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    let BcryptUser = sequelize.define("BcryptUser", {
+    let BcryptUsers = sequelize.define("BcryptUsers", {
           id: {
               primaryKey: true,
               type: DataTypes.INTEGER,
@@ -16,7 +16,8 @@ module.exports = function(sequelize, DataTypes) {
               type: DataTypes.STRING,
               allowNull: false,
               isEmail: true,
-              isUnique: true
+              isUnique: true,
+              primaryKey: true
           },
           password: {
               type: DataTypes.STRING,
@@ -26,14 +27,14 @@ module.exports = function(sequelize, DataTypes) {
           }
     });
     // generating a hash
-    BcryptUser.generateHash = function (password) {
+    BcryptUsers.generateHash = function (password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
     };
 
     // checking if password is valie
-    BcryptUser.prototype.validPassword = function (password) {
+    BcryptUsers.prototype.validPassword = function (password) {
         return bcrypt.compareSync(password, this.localPassword);
     }
-    return BcryptUser;
+    return BcryptUsers;
 
   };

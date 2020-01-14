@@ -15,6 +15,10 @@ body {
     height: 75px;
 }
 
+.modal-style {
+    padding: 20px;
+}
+
 #logo {
     width: 120%;
     margin-top: 12px;
@@ -239,6 +243,7 @@ p#computer-player-name {
     padding: 10px;
     z-index: -1;
 }
+
 .matchup-grid-bottom {
     background-color: white;
     padding: 10px 0px 20px 0px;
@@ -250,6 +255,7 @@ p#computer-player-name {
     padding-top: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid #ffffff;
+    cursor: pointer;
 }
 
 .week-dropdown {
@@ -291,6 +297,53 @@ a:hover {
 
     #tagline {
         display: none;
+    }
+
+}
+
+@media screen and (max-width: 376px) {
+
+    .computer-title {
+        font-size: 24px;
+        line-height: 26px;
+        margin-bottom: 15px;
+    }
+
+    .user-title {
+        font-size: 24px;
+        line-height: 26px;
+        margin-bottom: 15px;
+    }
+
+    #user-budget {
+        font-size: 36px;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    #computer-budget {
+        font-size: 36px;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    #main-title {
+        width: 200%;
+    }
+
+    .matchup-grid {
+        padding: 10px 0px 10px 0px;
+        margin: 0px;
+        z-index: -1;
+    }
+
+    .row {
+        /* padding: 0px; */
+        margin: 0px;
+    }
+
+    .drop-test {
+        width: 100%;
     }
 
 }
