@@ -1,5 +1,14 @@
 $(document).ready(function () {
 
+    // set email and team name from local storage
+    let userEmail = sessionStorage.getItem("email");
+    let teamName = sessionStorage.getItem("team name");
+
+    // if there's no user email in session storage redirect to login page
+    if ((!userEmail) || (userEmail === "")) {
+        window.location.href = "/login";
+    };
+
     // set up universal variables
     let playerArray = [];
     let playerIdIndex = 0;
@@ -22,16 +31,15 @@ $(document).ready(function () {
     let dataPosition = "";
     let userSalary;
     let gameObject = {};
-    let userEmail = "dave@dave.com"; // this will be populated from the login info
-    let teamName = "Team Dave"; // this will be dynamic once we create the login process
-    let week = parseInt([Math.floor(Math.random()*17)]); // creates a random week on every new game
+    // create a random week on every new game
+    let week = parseInt([Math.floor(Math.random()*17)]);
     
-    // run all the necessary functions to get the game loaded
+    // call all the necessary functions to get the game loaded
     renderUserTeam();
     renderComputerTeam();
     renderPositionDropdown();
 
-    // Rules button
+    // Rules button slider
     $("p#instructions-text").hide();
     $(".instructions").click(function () {
         $("p#instructions-text").slideToggle();
@@ -260,7 +268,7 @@ $(document).ready(function () {
                 cb(data);
             }
         });
-    }
+    };
     // function for grabbing the top 15 players and storing their player IDs in an array (got this from Stack Overflow)
     function getPlayerIds() {
 
@@ -289,9 +297,9 @@ $(document).ready(function () {
                 // stop at the top 15
                 if (playerIdIndex > 15) {
                     playerIdIndex = 15;
-                }
-            })
-    }
+                };
+            });
+    };
     // use the playerId to use in the ajax call to grab player info
     function getPlayerInfo() {
         return $.ajax("https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=87259770c8654c4aa8d0dd12658e7d93");
@@ -328,7 +336,7 @@ $(document).ready(function () {
                 cb(data);
             }
         });
-    } // end of populate computer function
+    }; // end of populate computer function
 
     // function that renders the user's image grid
     function renderUserTeam() {
@@ -374,7 +382,7 @@ $(document).ready(function () {
 
         }; // end of loop
 
-    } // end of render user team function 
+    }; // end of render user team function 
 
     // same deal for the computer
     function renderComputerTeam() {
@@ -416,19 +424,9 @@ $(document).ready(function () {
             $(".submit-button").prop("disabled", false);
         } else {
             $(".submit-button").prop("disabled", true);
-        }
+        };
 
-    } // end of render computer team function
-
-    // submit button function
-    $(document.body).on("click", ".submit-button", function (e) {
-        e.preventDefault();
-
-        gameObject = { user: userTeam, computer: computerTeam };
-
-        submitGame(gameObject);
-
-    });
+    }; // end of render computer team function
 
     // function for rendering the positions dropdown
     function renderPositionDropdown() {
@@ -453,33 +451,49 @@ $(document).ready(function () {
             if (userTeam[i].localPosition === "QB") {
                 qbBtn.addClass("disabled");
                 $("").data("toggle", "");
-            }
+            };
             if (userTeam[i].localPosition === "RB1") {
                 rb1Btn.addClass("disabled");
-            }
+            };
             if (userTeam[i].localPosition === "RB2") {
                 rb2Btn.addClass("disabled");
-            }
+            };
             if (userTeam[i].localPosition === "WR1") {
                 wr1Btn.addClass("disabled");
-            }
+            };
             if (userTeam[i].localPosition === "WR2") {
                 wr2Btn.addClass("disabled");
-            }
+            };
             if (userTeam[i].localPosition === "K") {
                 kickBtn.addClass("disabled");
-            }
-        }
+            };
+        };
         $(".position-list").append(qbBtn).append(rb1Btn).append(rb2Btn).append(wr1Btn).append(wr2Btn).append(kickBtn);
 
-    } // end of render position dropdown loop
+    }; // end of render position dropdown loop
 
+    // submit button function
+    $(document.body).on("click", ".submit-button", function (e) {
+        e.preventDefault();
+        // combine the user & computer intoo one object
+        gameObject = { user: userTeam, computer: computerTeam };
+        // pass the object into the submit game function
+        console.log(gameObject);
+        submitGame(gameObject);
+    });
 
+    $(document.body).on("click", ".logout", function (e) {
+        e.preventDefault();
+        sessionStorage.clear();
+        window.location.href = "/login";
+    });
+    
     // Submits a new post and brings user to blog page upon completion
       function submitGame(Post) {
+          console.log(Post);
         $.post("/api/submit/", Post, function() {
           window.location.href = "/results";
         });
-    }
+    };
 
 });

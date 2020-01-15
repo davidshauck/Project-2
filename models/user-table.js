@@ -1,31 +1,103 @@
 module.exports = function(sequelize, DataTypes) {
   let UserGame = sequelize.define("UserGame", {
       gameId: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-          },
-        week: DataTypes.INTEGER,
-        teamName: DataTypes.STRING,
-        email: DataTypes.STRING,
-        playerName1: DataTypes.STRING,
-        PlayerID1: DataTypes.INTEGER,
-        url1: DataTypes.STRING,
-        playerName2: DataTypes.STRING,
-        PlayerID2: DataTypes.INTEGER,
-        url2: DataTypes.STRING,
-        playerName3: DataTypes.STRING,
-        PlayerID3: DataTypes.INTEGER,
-        url3: DataTypes.STRING,
-        playerName4: DataTypes.STRING,
-        PlayerID4: DataTypes.INTEGER,
-        url4: DataTypes.STRING,
-        playerName5: DataTypes.STRING,
-        PlayerID5: DataTypes.INTEGER,
-        url5: DataTypes.STRING,
-        playerName6: DataTypes.STRING,
-        PlayerID6: DataTypes.INTEGER,
-        url6: DataTypes.STRING
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      isHuman: {
+        type: DataTypes.BOOLEAN,
+        validate: true
+      },
+      sharedId: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      week: { 
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      teamName: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      email: { 
+        type: DataTypes.STRING,
+        validate: true,
+        primaryKey: true
+      },
+      playerName1: {
+        type: DataTypes.STRING,
+        validate: true,
+      },
+      PlayerID1: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      url1: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      playerName2: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerID2: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      url2: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      playerName3: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerID3: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      url3: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      playerName4: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerID4: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      url4: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      playerName5: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerID5: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      url5: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      playerName6: {
+        type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerID6: {
+        type: DataTypes.INTEGER,
+        validate: true
+      },
+      url6: {
+        type: DataTypes.STRING,
+        validate: true
+      },
   });
   return UserGame;
 };

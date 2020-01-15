@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
-    let joinedResults = [];
+    // set universal variables
+    let userEmail = sessionStorage.getItem("email");
+    let joinedResults = ["xxx"];
     let week = "";
     let playerId = "";
     let computerId = "";
@@ -10,13 +12,14 @@ $(document).ready(function() {
     let liveGameId = "";
     let index;
     let newArray;
-    
+    let gameCount = 0;
+
 // loading the SQL table first
 $.ajax({
-    url: "/api/results",
+    url: "/api/results?key="+userEmail,
     type: "GET",
     dataType: "json",
-    }) .then(function(data) {
+    }).then(function(data) {
     // converting the returned data to a new object
     joinedResults = data;
     // this is a loop through an array buried within an object
@@ -24,18 +27,18 @@ $.ajax({
         // pulling the results out to make a more manageable mini array of weeks and gameIds
         weekArray.push({week: joinedResults[0].UserGames[i].week, gameId: joinedResults[0].UserGames[i].gameId});
         };
-        // setting the week variable to the most recent game played (length minus 1 gets the last item in the array)
-        week = joinedResults[0].UserGames[weekArray.length-1].week;
+        // setting the week variable to the most recent game played (need to start with the 2nd to last record to keep the logic straight)
+        week = joinedResults[0].UserGames[weekArray.length-2].week;
         // setting a variable for the corresponding gameId
-        liveGameId = joinedResults[0].UserGames[weekArray.length-1].gameId;
+        liveGameId = joinedResults[0].UserGames[weekArray.length-2].gameId;
         // creating another mini array from an array buried in the user results array
         newArray = joinedResults[0].UserGames;
-        // pulling out the index of the location of the game we're displaying
+        // pulling out the index of the game we're displaying
         index = newArray.findIndex(x => x.gameId === liveGameId);
 
     // populating the div with the name of the team of the user who is playing
-    $("#user-team").html(joinedResults[0].UserGames[0].teamName);
-    // run the populateTabgles function passing in 3 parameters that we need
+    $("#user-team").html(joinedResults[0].name);
+    // run the populateTables function passing in 3 parameters that we need
     populateTables(joinedResults, week, index);
     // populate the week number with whatever week is being played
     $("#week-number").html("<h1>WEEK " + week + "</h1>");
@@ -43,28 +46,30 @@ $.ajax({
     // create the past games dropdown
     let weekDropdown = $("<a>");
     // loop through the total number of games played
-    for (let i = 0; i < weekArray.length; i++) {
+    for (let i = 0; i < weekArray.length; i+=2) { // MAY NEED TO TWEAK WHEN I GET THE BULK TABLE FIXED
         // create a div within the a record
         weekDropdown.attr("<div>");
         // add a bootstrap class
         weekDropdown.addClass("dropdown-item");
         // add some styling classes
-        weekDropdown.addClass("week-dropdown");
-        // add some data- attributes to pull info later
+        // weekDropdown.addClass("week-items");
+        // add some data-attributes to pull info later
         weekDropdown.attr("data-week", weekArray[i].week);
         weekDropdown.attr("data-game", weekArray[i].gameId);
-        // add an id for photo insertion
-        weekDropdown.attr("id", "week"+i);
+        // increment gameCount
+        gameCount += 1;
+        // // add an id for photo insertion
+        // weekDropdown.attr("id", "week"+gameCount);
         // add the text
-        weekDropdown.html("GAME " + parseInt(i+1));
+        weekDropdown.html("GAME " + parseInt(gameCount));
         // append to the dropdown list
         weekDropdown.appendTo(".week-list");
-    }
+    };
 
 }); // end of the SQL load
 
     // click function for selecting which results we want to see
-    $(document.body).on("click", ".week-dropdown", function(e) {
+    $(document.body).on("click", ".dropdown-item", function(e) {
         e.preventDefault();
         // empty some stuff out
         computerRow = "";
@@ -78,7 +83,13 @@ $.ajax({
         $("#current-user-results > body").empty();
         $("#current-computer-results > body").empty();
         // once we have all this info call on the results to pull up the new info  
-        $.get("/api/results/", gameResults);
+        $.ajax({
+            url: "/api/results?key="+userEmail,
+            type: "GET",
+            dataType: "json",
+            }).then(function(data) {
+                gameResults(data);
+            });
 
     }); // end of click function
         
@@ -125,13 +136,13 @@ $.ajax({
         // loop for populating computer table
         for (let i = 1; i < 7; i++) {
             // grab the playerId from the saved table
-            computerId = joinedResults[0].ComputerGames[index]['PlayerID'+i];
+            computerId = joinedResults[0].UserGames[index+1]['PlayerID'+i];
             // update the week (may not be needed)
-            week = joinedResults[0].ComputerGames[index].week;
+            week = joinedResults[0].UserGames[index+1].week;
             // call the results API
             getComputerResults(function(info){
                 // create each row
-                let computerRow = $("<tr id='user-row" + i + "'>").append(
+                let computerRow = $("<tr id='computer-row" + i + "'>").append(
                     // div for points
                     $("<td>").addClass("table-points").text(info.FantasyPoints),
                     // add a blank div to get the spacig right
@@ -139,7 +150,7 @@ $.ajax({
                     // add the player name and some styling
                     $("<td style='text-align: right'>").addClass("table-text").text(info.Name),
                     // add the image
-                    $("<td><img src='" + joinedResults[0].ComputerGames[index]["url"+i] + "' style='width: 40px'>").addClass("align-right"),
+                    $("<td><img src='" + joinedResults[0].UserGames[index+1]["url"+i] + "' style='width: 40px'>").addClass("align-right"),
                     ); // end of append, then add it to the table body
                     $("#current-computer-results > tbody").append(computerRow);
                     // add up the user points column
@@ -150,7 +161,7 @@ $.ajax({
 
         }; // end of loop
 
-    } // end of populate tables function
+    }; // end of populate tables function
         
     // Ajax request for grabbing score info for user
     function getUserResults(cb){
@@ -192,7 +203,7 @@ $.ajax({
         computerScore = 0;
         // update main variable with the data
         joinedResults = data;
-        // Jim's version of my function agove
+        // Jim's version of my function above
         index = newArray.findIndex(y => {
             return y.gameId == liveGameId;
         });
@@ -201,4 +212,11 @@ $.ajax({
         // run the populate table with the new variables;
         populateTables(joinedResults, week, index);
     };
+
+    $(document.body).on("click", ".logout", function (e) {
+        e.preventDefault();
+        sessionStorage.clear();
+
+    });
+
 });

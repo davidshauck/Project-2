@@ -54,7 +54,7 @@
                 <a class="nav-link text-white" href="/results">Results</a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link text-white" href="/login">Logout</span></a>
+                <a class="nav-link text-white logout" href="/login">Log out</span></a>
               </li>             
             </ul>
           </div> 
@@ -87,7 +87,7 @@
     <div class="container matchup-grid">
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-5">
+            <div class="col-5 no-pad">
               <div class="user-title">
                 <!-- this is where the team name goes -->
               </div>
@@ -98,7 +98,7 @@
                 <!-- div where player images are rendered -->
               </div> 
             </div>
-            <div class="col-5">
+            <div class="col-5 no-pad">
               <div class="computer-title">The Computer</div>
                 <div id="computer-budget">
                   $150<!-- this is where the computer budget goes -->
@@ -113,9 +113,9 @@
     <!-- buttons -->
     <div class="container matchup-grid-bottom">
       <div class="row button-row">
-        <div class="col-lg-1 col-md-1 col-sm-0 col-xs-0"></div>
+        <div class="col-lg-1 col-md-1 col-sm-0 col-xs-0 buttons"></div>
         <!-- position dropdown -->
-        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 buttons">
           <div class="dropdown">
             <div class="dropup show">
               <a class="btn dropdown-toggle" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Position</a>
@@ -126,7 +126,7 @@
           </div>
         </div>
         <!-- player dropdown-->
-        <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12">
+        <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12 buttons">
           <div class="dropdown">
             <div class="dropup show">
               <a class="btn dropdown-toggle player-button" style="background-color:#fbae17; color: white" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Player</a>

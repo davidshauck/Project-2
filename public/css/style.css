@@ -13,12 +13,18 @@ body {
 
 .header {
     height: 75px;
+    margin: 0px;
+}
+
+.modal-style {
+    padding: 20px;
 }
 
 #logo {
     width: 120%;
     margin-top: 12px;
-    padding-right: 30px;
+    padding-right: 25px;
+    transform: translate(-10px);
 }
 
 #tagline {
@@ -63,6 +69,10 @@ p#instructions-text {
     margin: 10px;
 }
 
+.buttons {
+    margin-bottom: 5px;
+}
+
 p#user-player-name {
     cursor: pointer;
     color: black;
@@ -71,6 +81,7 @@ p#user-player-name {
     margin-top: 3px;
     white-space: nowrap;
     text-align: center;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 p#computer-player-name {
@@ -80,6 +91,7 @@ p#computer-player-name {
     margin-top: 3px;
     white-space: nowrap;
     text-align: center;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 #player-image {
@@ -95,6 +107,7 @@ p#computer-player-name {
     line-height: 50px;
     display: block;
     text-transform: uppercase;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .computer-title {
@@ -104,6 +117,7 @@ p#computer-player-name {
     display: block;
     text-align: right;
     text-transform: uppercase;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 #user-budget {
@@ -152,6 +166,7 @@ p#computer-player-name {
     margin-bottom: 5px;
     text-align: right;
     display: block;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 #user-team {
@@ -161,6 +176,7 @@ p#computer-player-name {
     margin-bottom: 5px;
     text-align: left;
     display: block;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 #week-number {
@@ -221,7 +237,8 @@ p#computer-player-name {
 
 .table-text {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .table-points {
@@ -239,6 +256,7 @@ p#computer-player-name {
     padding: 10px;
     z-index: -1;
 }
+
 .matchup-grid-bottom {
     background-color: white;
     padding: 10px 0px 20px 0px;
@@ -250,6 +268,7 @@ p#computer-player-name {
     padding-top: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid #ffffff;
+    cursor: pointer;
 }
 
 .week-dropdown {
@@ -292,5 +311,70 @@ a:hover {
     #tagline {
         display: none;
     }
+
+}
+
+@media screen and (max-width: 575px) {
+
+    body {
+        background-repeat: repeat;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+
+    body {
+        background-repeat: repeat;
+    }
+
+}
+
+.computer-title, .user-title {
+    font-size: 24px;
+    line-height: 26px;
+    margin-bottom: 15px;
+    white-space: nowrap;
+}
+
+
+@media screen and (max-width: 575px) {
+
+    #user-budget, #computer-budget {
+        font-size: 36px;
+        padding: 0px;
+        margin: 0px 0px 10px 0px;
+    }
+
+    #main-title {
+        width: 200%;
+    }
+
+    .matchup-grid {
+        padding: 10px 0px 10px 0px;
+        margin: 0px;
+        z-index: -1;
+    }
+
+    .row {
+        /* padding: 0px; */
+        margin: 0px;
+    }
+
+    .drop-test {
+        width: 100%;
+    }
+
+    .no-pad {
+        padding: 0px;
+    }
+
+@media screen and (max-width: 414px) {
+
+    .computer-title, .user-title {
+        font-size: 18px;
+    }
+
+}
 
 }
