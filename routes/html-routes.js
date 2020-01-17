@@ -3,6 +3,15 @@
 // Path package to get the correct file path for our html
 // ===============================================================================
 let path = require("path");
+require("dotenv").config();
+
+// let keys = require("./keys.js");
+
+
+// let footballData = new FootballData({
+//   id: keys.footballData.id
+// });
+
 
 // ===============================================================================
 // ROUTING

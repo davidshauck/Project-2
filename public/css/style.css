@@ -76,7 +76,7 @@ p#instructions-text {
 p#user-player-name {
     cursor: pointer;
     color: black;
-    font-size: 13px;
+    font-size: 12px;
     text-transform: uppercase;
     margin-top: 3px;
     white-space: nowrap;

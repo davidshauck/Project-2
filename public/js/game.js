@@ -24,13 +24,16 @@ $(document).ready(function () {
     let deleteRecord = "";
     let disable = true;
     let enable = false;
-    let computerBudget = 150;
-    let userBudget = 150;
+    let computerBudget = 200;
+    let userBudget = 200;
     let computerPlayerName = "";
     let userPlayerName = "";
     let dataPosition = "";
     let userSalary;
     let gameObject = {};
+    let userScore = 0;
+    let computerScore = 0;
+    let a = {};
     // create a random week on every new game
     let week = parseInt([Math.floor(Math.random()*17)]);
     
@@ -74,7 +77,7 @@ $(document).ready(function () {
             // callback function for getting player IDs from API
             getPlayerIds().then(getPlayerInfo).then(function (data) {
                 // set random computer player for later use (the *20 picks top 20 players per position; can be changed)
-                computerPlayer = playerArray[Math.floor(Math.random() * 20)].PlayerID;
+                computerPlayer = playerArray[Math.floor(Math.random() * 15)].PlayerID;
                 // create dynamic list of players for user to choose from
                 let playerDropdown = $("<a>");
                 // loop through 15 times to give user 15 options
@@ -274,18 +277,14 @@ $(document).ready(function () {
 
         let queryUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week + "/" + position + "/FantasyPoints?key=87259770c8654c4aa8d0dd12658e7d93";
 
-        return $.ajax(queryUrl)
-            .then(function (response) {
-
-                return response;
-
-            }).then(function (json) {
-                // grab playerId from the returned data
-                playerId = json[playerIdIndex].PlayerID;
+        return $.ajax(queryUrl).then(function(json) {
                 // put all the returned data into a local array
                 playerArray = json;
+                // grab playerId from the returned data
+                playerId = playerArray[playerIdIndex].PlayerID;
+                // need to clear out array before each loop through
+                playerIds = []; 
                 // loop through that array and push them to a new playerIds array
-                playerIds = []; // need to clear it out each loop through
                 for (let i = 0; i < 15; i++) {
                     // if the salary is null make it $5
                     if (!playerArray[i].YahooSalary) {
@@ -300,10 +299,10 @@ $(document).ready(function () {
                 };
             });
     };
-    // use the playerId to use in the ajax call to grab player info
+    // use the playerId we just got in the ajax call to grab player info
     function getPlayerInfo() {
         return $.ajax("https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=87259770c8654c4aa8d0dd12658e7d93");
-    }
+    };
     // part of the whole callback function
     function populateUserTeam(cb) {
 
@@ -420,7 +419,7 @@ $(document).ready(function () {
         }; // end of loop
 
         // once both teams have 6 players, enable the submit button
-        if ((userTeam.length >= 5) && (computerTeam.length >= 5)) {
+        if ((userTeam.length >= 5) && (computerTeam.length > 5)) {
             $(".submit-button").prop("disabled", false);
         } else {
             $(".submit-button").prop("disabled", true);
@@ -477,9 +476,10 @@ $(document).ready(function () {
         e.preventDefault();
         // combine the user & computer intoo one object
         gameObject = { user: userTeam, computer: computerTeam };
+        debugger
         // pass the object into the submit game function
-        console.log(gameObject);
-        submitGame(gameObject);
+        getScores(gameObject).then(calculateWin(gameObject)).then(submitGame(gameObject));
+
     });
 
     $(document.body).on("click", ".logout", function (e) {
@@ -487,13 +487,119 @@ $(document).ready(function () {
         sessionStorage.clear();
         window.location.href = "/login";
     });
+
+    // **** RESULTS FUNCTION ***
+
+    function getScores(data) {
+        return new Promise(function(resolve) {
+        console.log("DATA ", data);
+        // debugger;
+        for (let i = 1; i < 7; i++) {
+            // grab the right player id so we can get their image and points from the API
+            playerId = data.user[i-1].PlayerID;
+            // update the week variable for the same reason
+            week = data.user[0].week;
+            // call the results API
+            getUserResults(function(info){
+                // parse the data for use     
+                info = JSON.parse(info);
+
+                data.user[i-1]["PlayerPoints"] = info.FantasyPoints;
+            
+            }); // end of the callback
+
+        }; // end of the loop
+
+        // loop for populating computer table
+        for (let j = 1; j < 7; j++) {
+            // grab the playerId from the saved table
+            computerId = data.computer[j-1].PlayerID;
+            console.log("COMPUTER ID ", computerId)
+            // update the week (may not be needed)
+            week = data.computer[0].week;
+            console.log("WEEK ", week);
+            // call the results API
+            getComputerResults(function(info){
+
+                data.computer[j-1]["PlayerPoints"] = info.FantasyPoints;
+
+            }); // end of callback
     
-    // Submits a new post and brings user to blog page upon completion
-      function submitGame(Post) {
-          console.log(Post);
-        $.post("/api/submit/", Post, function() {
-          window.location.href = "/results";
+        }; // end of loop
+
+        resolve(data);
+
+        });
+    }
+
+    // Ajax request for grabbing score info for user
+    function getUserResults(cb){
+        
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
+    
+        $.ajax({
+            url: playerUrl,
+            type: "GET",
+            dataType: "text",
+            cache: false,
+            async: false,
+            success: function(data){
+                // call the callback passed
+                cb(data);
+            }
+        });
+    }; // end of populate user team function
+
+      // Ajax request for grabbing score info for computer
+      function getComputerResults(cb){
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+computerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
+            $.ajax({
+                url: playerUrl,
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                async: false, 
+                success: function(data){
+                    // call the callback passed
+                    cb(data);
+                }
+            });
+        }; // end of function
+
+    function calculateWin(data) {
+        // debugger;
+        return new Promise(function(resolve) {
+
+         // clear out scores
+         userScore = 0
+         computerScore = 0;
+         // loop through to add up the player points
+         for (let i = 0; i<data.length; i++) {
+             userScore += data.user[i].PlayerPoints;
+             computerScore += data.computer[i].PlayerPoints;
+         };
+         // check to see who won and add the appropriate key value to the array
+         if (userScore > computerScore) {
+             data.computer[0]["win"] = 0;
+             data.user[0]["win"] = 1;
+         } else {
+             data.computer[0]["win"] = 1;
+             data.user[0]["win"] = 0;
+         };
+         console.log("A", data)
+         console.log(userScore, computerScore)
+         resolve(data);
         });
     };
 
+    // Submits a new post and brings user to blog page upon completion
+    function submitGame(Post) {
+        console.log("SUBMIT ", Post);
+        
+        $.post("/api/submit/", Post, function() {
+          window.location.href = "/results";
+        });
+    
+    };
+    
 });
