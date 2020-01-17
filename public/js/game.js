@@ -24,8 +24,8 @@ $(document).ready(function () {
     let deleteRecord = "";
     let disable = true;
     let enable = false;
-    let computerBudget = 200;
-    let userBudget = 200;
+    let computerBudget = 150;
+    let userBudget = 150;
     let computerPlayerName = "";
     let userPlayerName = "";
     let dataPosition = "";
@@ -474,9 +474,12 @@ $(document).ready(function () {
     // submit button function
     $(document.body).on("click", ".submit-button", function (e) {
         e.preventDefault();
+        // empty the grid
+        $(".matchup-grid").empty();
+        // add loading gift while results are fetched
+        $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"}).appendTo(".matchup-grid");
         // combine the user & computer intoo one object
         gameObject = { user: userTeam, computer: computerTeam };
-        debugger
         // pass the object into the submit game function
         getScores(gameObject).then(calculateWin(gameObject)).then(submitGame(gameObject));
 

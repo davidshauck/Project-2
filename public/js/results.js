@@ -1,10 +1,7 @@
 $(document).ready(function() {
 
     // set universal variables
-    let userEmail = sessionStorage.getItem("email");
     let week = "";
-    let playerId = "";
-    let computerId = "";
     let userScore = 0;
     let computerScore = 0;
     let weekArray = [];
@@ -12,6 +9,11 @@ $(document).ready(function() {
     let index;
     let newArray;
     let gameCount = 0;
+    let userRecord = 0;
+    let computerRecord = 0;
+    let userEmail = sessionStorage.getItem("email");
+    let teamName = sessionStorage.getItem("team name") + " ("+userRecord+"-"+computerRecord+")";
+    let computerName = "The Computer ("+computerRecord+"-"+userRecord+")";
 
 // loading the SQL table first
 $.ajax({
@@ -37,7 +39,7 @@ $.ajax({
         index = newArray.findIndex(x => x.gameId === liveGameId);
 
     // populating the div with the name of the team of the user who is playing
-    $("#user-team").html(joinedResults[0].name);
+    $("#user-team").html(teamName);
     // run the populateTables function passing in 3 parameters that we need
     populateTables(joinedResults, week, index);
     // populate the week number with whatever week is being played
@@ -46,20 +48,16 @@ $.ajax({
     // create the past games dropdown
     let weekDropdown = $("<a>");
     // loop through the total number of games played
-    for (let i = 0; i < weekArray.length; i+=2) { // MAY NEED TO TWEAK WHEN I GET THE BULK TABLE FIXED
+    for (let i = 0; i < weekArray.length; i+=2) {
         // create a div within the a record
         weekDropdown.attr("<div>");
         // add a bootstrap class
         weekDropdown.addClass("dropdown-item");
-        // add some styling classes
-        // weekDropdown.addClass("week-items");
         // add some data-attributes to pull info later
         weekDropdown.attr("data-week", weekArray[i].week);
         weekDropdown.attr("data-game", weekArray[i].gameId);
         // increment gameCount
         gameCount += 1;
-        // // add an id for photo insertion
-        // weekDropdown.attr("id", "week"+gameCount);
         // add the text
         weekDropdown.html("GAME " + parseInt(gameCount));
         // append to the dropdown list
@@ -97,6 +95,27 @@ $.ajax({
     function populateTables(joinedResults, week, index) {
         // not sure I need to do this newArray again, will check
         newArray = joinedResults[0].UserGames;
+        console.log(newArray);
+        // loop for calculating team records
+        for (let i = 0; i < newArray.length; i+=2) {
+            // check to see if sum of user scores is > sum of computer scores
+            if ((parseInt(newArray[i].PlayerPoints1) + parseInt(newArray[i].PlayerPoints2) + parseInt(newArray[i].PlayerPoints3) + parseInt(newArray[i].PlayerPoints4) + parseInt(newArray[i].PlayerPoints5) + parseInt(newArray[i].PlayerPoints6)) >
+            (parseInt(newArray[i+1].PlayerPoints1) + parseInt(newArray[i+1].PlayerPoints2) + parseInt(newArray[i+1].PlayerPoints3) + parseInt(newArray[i+1].PlayerPoints4) + parseInt(newArray[i+1].PlayerPoints5) + parseInt(newArray[i+1].PlayerPoints6))) {
+                // if so increment user record
+                userRecord += 1;
+                console.log(userRecord)
+            } else {
+                // otherwise increment computer record
+                computerRecord += 1;
+            };
+            // update team name div with new record
+            teamName = sessionStorage.getItem("team name") + " ("+userRecord+"-"+computerRecord+")";
+            computerName = "The Computer ("+computerRecord+"-"+userRecord+")";
+            $("#user-team").html(teamName);
+            $("#computer-team").html(computerName);
+    
+        };
+
         // clear junk out
         computerRow = "";
         playerRow = "";
@@ -110,16 +129,12 @@ $.ajax({
             playerId = joinedResults[0].UserGames[index]['PlayerID'+i];
             // update the week variable for the same reason
             week = joinedResults[0].UserGames[index].week;
-            // call the results API
-            getUserResults(function(info){
-                // parse the data for use     
-                info = JSON.parse(info);
                 // create each row
                 let playerRow = $("<tr id='user-row" + i + "'>").append(
                     // add the image
                     $("<td><img src='" + joinedResults[0].UserGames[index]["url"+i] + "' style='width: 40px'>"),
                     // add the player name and some styling
-                    $("<td style='text-align: left'>").addClass("table-text").text(info.Name),
+                    $("<td style='text-align: left'>").addClass("table-text").text(joinedResults[0].UserGames[index]["playerName"+i]),
                     // add a blank div to get the spacig right
                     $("<td>").text(" "),
                     // div for points
@@ -130,7 +145,6 @@ $.ajax({
                     userScore += parseFloat(joinedResults[0].UserGames[index]["PlayerPoints"+i]);
                     // update the score div
                     $("#user-points").html(userScore.toFixed(2));
-            }); // end of the callback
         }; // end of the loop
         
         // loop for populating computer table
@@ -140,7 +154,7 @@ $.ajax({
             // update the week (may not be needed)
             week = joinedResults[0].UserGames[index+1].week;
             // call the results API
-            getComputerResults(function(info){
+            // getComputerResults(function(info){
                 // create each row
                 let computerRow = $("<tr id='computer-row" + i + "'>").append(
                     // div for points
@@ -148,7 +162,7 @@ $.ajax({
                     // add a blank div to get the spacig right
                     $("<td>").text(" "),
                     // add the player name and some styling
-                    $("<td style='text-align: right'>").addClass("table-text").text(info.Name),
+                    $("<td style='text-align: right'>").addClass("table-text").text(joinedResults[0].UserGames[index+1]["playerName"+i]),
                     // add the image
                     $("<td><img src='" + joinedResults[0].UserGames[index+1]["url"+i] + "' style='width: 40px'>").addClass("align-right"),
                     ); // end of append, then add it to the table body
@@ -157,46 +171,13 @@ $.ajax({
                     computerScore += parseFloat(joinedResults[0].UserGames[index+1]["PlayerPoints"+i]);
                     // update the score div
                     $("#computer-points").html(computerScore.toFixed(2));
-            }); // end of callback
+            // }); // end of callback
 
         }; // end of loop
 
     }; // end of populate tables function
-        
-    // Ajax request for grabbing score info for user
-    function getUserResults(cb){
-        
-        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
     
-        $.ajax({
-            url: playerUrl,
-            type: "GET",
-            dataType: "text",
-            cache: false,
-            success: function(data){
-                // call the callback passed
-                cb(data);
-            }
-        });
-    }; // end of populate user team function
-    
-    // Ajax request for grabbing score info for computer
-    function getComputerResults(cb){
-
-    let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+computerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
-        $.ajax({
-            url: playerUrl,
-            type: "GET",
-            dataType: "json",
-            cache: false,
-            success: function(data){
-                // call the callback passed
-                cb(data);
-            }
-        });
-    }; // end of function
-    
-    // function for each time table is updated
+    // // function for each time table is updated
     function gameResults(data) {
         // clear stuff out
         userScore = 0;

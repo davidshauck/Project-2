@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
         validate: true
       },
       win: { 
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         validate: true
       },
       sharedId: {
