@@ -13,8 +13,8 @@ let bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 // setting our db relations
-db.UserGame.belongsTo(db.BcryptUsers, {foreignKey: "email", sourceKey: "email"});
-db.BcryptUsers.hasMany(db.UserGame, {foreignKey: "email", sourceKey: "email"});
+db.UserGames.belongsTo(db.BcryptUsers, {foreignKey: "email", sourceKey: "email"});
+db.BcryptUsers.hasMany(db.UserGames, {foreignKey: "email", sourceKey: "email"});
 
 // Routes
 // =============================================================
@@ -87,7 +87,7 @@ module.exports = function(app) {
   app.get("/api/results/", function(req, res) {
     db.BcryptUsers.findAll({
       include: [{
-          model: db.UserGame,
+          model: db.UserGames,
           where: {
               email: req.query.key
           }
@@ -100,54 +100,69 @@ module.exports = function(app) {
 
   // POST route for saving a new post
   app.post("/api/submit", function(req, res) {
-    db.UserGame.bulkCreate([
+    console.log(req.body);
+    db.UserGames.bulkCreate([
       { 
         isHuman: true,
+        win: req.body.user[0].win,
         week: req.body.user[0].week,
         teamName: req.body.user[0].teamName,
         email: req.body.user[0].email,
         PlayerID1: req.body.user[0].PlayerID,
         url1: req.body.user[0].url,
         playerName1: req.body.user[0].name,
+        PlayerPoints1: req.body.user[0].PlayerPoints,
         PlayerID2: req.body.user[1].PlayerID,
         url2: req.body.user[1].url,
         playerName2: req.body.user[1].name,
+        PlayerPoints2: req.body.user[1].PlayerPoints,
         PlayerID3: req.body.user[2].PlayerID,
         url3: req.body.user[2].url,
         playerName3: req.body.user[2].name,
+        PlayerPoints3: req.body.user[2].PlayerPoints,
         PlayerID4: req.body.user[3].PlayerID,
         url4: req.body.user[3].url,
         playerName4: req.body.user[3].name,
+        PlayerPoints4: req.body.user[3].PlayerPoints,
         PlayerID5: req.body.user[4].PlayerID,
         url5: req.body.user[4].url,
         playerName5: req.body.user[4].name,
+        PlayerPoints5: req.body.user[4].PlayerPoints,
         PlayerID6: req.body.user[5].PlayerID,
         url6: req.body.user[5].url,
-        playerName6: req.body.user[5].name
+        playerName6: req.body.user[5].name,
+        PlayerPoints6: req.body.user[5].PlayerPoints
       },
       {
         isHuman: false,
+        win: req.body.computer[0].win,
         week: req.body.computer[0].week,
         teamName: req.body.computer[0].teamName,
         email: req.body.computer[0].email,
         PlayerID1: req.body.computer[0].PlayerID,
         url1: req.body.computer[0].url,
         playerName1: req.body.computer[0].name,
+        PlayerPoints1: req.body.computer[0].PlayerPoints,
         PlayerID2: req.body.computer[1].PlayerID,
         url2: req.body.computer[1].url,
         playerName2: req.body.computer[1].name,
+        PlayerPoints2: req.body.computer[1].PlayerPoints,
         PlayerID3: req.body.computer[2].PlayerID,
         url3: req.body.computer[2].url,
         playerName3: req.body.computer[2].name,
+        PlayerPoints3: req.body.computer[2].PlayerPoints,
         PlayerID4: req.body.computer[3].PlayerID,
         url4: req.body.computer[3].url,
         playerName4: req.body.computer[3].name,
+        PlayerPoints4: req.body.computer[3].PlayerPoints,
         PlayerID5: req.body.computer[4].PlayerID,
         url5: req.body.computer[4].url,
         playerName5: req.body.computer[4].name,
+        PlayerPoints5: req.body.computer[4].PlayerPoints,
         PlayerID6: req.body.computer[5].PlayerID,
         url6: req.body.computer[5].url,
-        playerName6: req.body.computer[5].name
+        playerName6: req.body.computer[5].name,
+        PlayerPoints6: req.body.computer[5].PlayerPoints,
       },
     ]).then(function(dbResults) {
       res.json(dbResults);

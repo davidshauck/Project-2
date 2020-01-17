@@ -1,11 +1,16 @@
 module.exports = function(sequelize, DataTypes) {
-  let UserGame = sequelize.define("UserGame", {
+  let UserGames = sequelize.define("UserGames", {
       gameId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false
       },
       isHuman: {
+        type: DataTypes.BOOLEAN,
+        validate: true
+      },
+      win: { 
         type: DataTypes.BOOLEAN,
         validate: true
       },
@@ -38,6 +43,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         validate: true
       },
+      PlayerPoints1: {
+        type: DataTypes.DECIMAL(5,2),
+        validate: true
+      },
       playerName2: {
         type: DataTypes.STRING,
         validate: true
@@ -48,6 +57,10 @@ module.exports = function(sequelize, DataTypes) {
       },
       url2: {
         type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerPoints2: {
+        type: DataTypes.DECIMAL(5,2),
         validate: true
       },
       playerName3: {
@@ -62,6 +75,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         validate: true
       },
+      PlayerPoints3: {
+        type: DataTypes.DECIMAL(5,2),
+        validate: true
+      },
       playerName4: {
         type: DataTypes.STRING,
         validate: true
@@ -72,6 +89,10 @@ module.exports = function(sequelize, DataTypes) {
       },
       url4: {
         type: DataTypes.STRING,
+        validate: true
+      },
+      PlayerPoints4: {
+        type: DataTypes.DECIMAL(5,2),
         validate: true
       },
       playerName5: {
@@ -86,6 +107,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         validate: true
       },
+      PlayerPoints5: {
+        type: DataTypes.DECIMAL(5,2),
+        validate: true
+      },
       playerName6: {
         type: DataTypes.STRING,
         validate: true
@@ -98,6 +123,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         validate: true
       },
+      PlayerPoints6: {
+        type: DataTypes.DECIMAL(5,2),
+        validate: true
+      }
   });
-  return UserGame;
+  return UserGames;
 };

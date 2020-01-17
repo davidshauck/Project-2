@@ -2,7 +2,6 @@ $(document).ready(function() {
 
     // set universal variables
     let userEmail = sessionStorage.getItem("email");
-    let joinedResults = ["xxx"];
     let week = "";
     let playerId = "";
     let computerId = "";
@@ -16,6 +15,7 @@ $(document).ready(function() {
 
 // loading the SQL table first
 $.ajax({
+    // this queries the API and passes the user's
     url: "/api/results?key="+userEmail,
     type: "GET",
     dataType: "json",
@@ -123,11 +123,11 @@ $.ajax({
                     // add a blank div to get the spacig right
                     $("<td>").text(" "),
                     // div for points
-                    $("<td>").addClass("align-right table-points").text(info.FantasyPoints)
+                    $("<td>").addClass("align-right table-points").text(joinedResults[0].UserGames[index]["PlayerPoints"+i])
                     ); // end of append to row, then add it to the table body
                     $("#current-user-results > tbody").append(playerRow);
                     // add up the user points column
-                    userScore += parseFloat(info.FantasyPoints);
+                    userScore += parseFloat(joinedResults[0].UserGames[index]["PlayerPoints"+i]);
                     // update the score div
                     $("#user-points").html(userScore.toFixed(2));
             }); // end of the callback
@@ -144,7 +144,7 @@ $.ajax({
                 // create each row
                 let computerRow = $("<tr id='computer-row" + i + "'>").append(
                     // div for points
-                    $("<td>").addClass("table-points").text(info.FantasyPoints),
+                    $("<td>").addClass("table-points").text(joinedResults[0].UserGames[index+1]["PlayerPoints"+i]),
                     // add a blank div to get the spacig right
                     $("<td>").text(" "),
                     // add the player name and some styling
@@ -154,7 +154,7 @@ $.ajax({
                     ); // end of append, then add it to the table body
                     $("#current-computer-results > tbody").append(computerRow);
                     // add up the user points column
-                    computerScore += parseFloat(info.FantasyPoints);
+                    computerScore += parseFloat(joinedResults[0].UserGames[index+1]["PlayerPoints"+i]);
                     // update the score div
                     $("#computer-points").html(computerScore.toFixed(2));
             }); // end of callback
