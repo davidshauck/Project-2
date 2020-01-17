@@ -1,3 +1,3 @@
-exports.footballData = {
-    id: process.env.SPORTSDATA_ID
+exports.heroku = {
+    password: process.env.HEROKU_PW
 };
