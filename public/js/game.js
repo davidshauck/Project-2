@@ -10,6 +10,7 @@ $(document).ready(function () {
     };
 
     // set up universal variables
+    let loadingGif = $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"});
     let playerArray = [];
     let playerIdIndex = 0;
     let playerIds = [];
@@ -33,7 +34,6 @@ $(document).ready(function () {
     let gameObject = {};
     let userScore = 0;
     let computerScore = 0;
-    let a = {};
     // create a random week on every new game
     let week = parseInt([Math.floor(Math.random()*17)]);
     
@@ -477,7 +477,7 @@ $(document).ready(function () {
         // empty the grid
         $(".matchup-grid").empty();
         // add loading gift while results are fetched
-        $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"}).appendTo(".matchup-grid");
+        $(".matchup-grid").append(loadingGif);
         // combine the user & computer intoo one object
         gameObject = { user: userTeam, computer: computerTeam };
         // pass the object into the submit game function
