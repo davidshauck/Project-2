@@ -14,6 +14,9 @@ $(document).ready(function() {
     let userEmail = sessionStorage.getItem("email");
     let teamName = sessionStorage.getItem("team name") + " ("+userRecord+"-"+computerRecord+")";
     let computerName = "The Computer ("+computerRecord+"-"+userRecord+")";
+    $("#user-team").html(teamName);
+    $("#week-number").html("<h1>NO SAVED GAMES</h1>");
+
 
 // loading the SQL table first
 $.ajax({
@@ -96,6 +99,9 @@ $.ajax({
         // not sure I need to do this newArray again, will check
         newArray = joinedResults[0].UserGames;
         console.log(newArray);
+        // zero out the records
+        userRecord = 0;
+        computerRecord = 0;
         // loop for calculating team records
         for (let i = 0; i < newArray.length; i+=2) {
             // check to see if sum of user scores is > sum of computer scores
