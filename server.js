@@ -5,7 +5,7 @@
 // *** Dependencies
 // =============================================================
 const express = require("express");
-
+const Sequelize = require("sequelize")
 // Sets up the Express App
 // =============================================================
 let app = express();
@@ -36,6 +36,7 @@ if (process.env.JAWSDB_URL) {
 else {
   seq = require("./models").sequelize
 }
+
 seq.sync().then(() => {
 app.listen(PORT, () => console.log('server started on port ' + PORT));
 });
