@@ -10,7 +10,6 @@ $(document).ready(function () {
     };
 
     // set up universal variables
-    let loadingGif = $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"});
     let playerArray = [];
     let playerIdIndex = 0;
     let playerIds = [];
@@ -25,7 +24,7 @@ $(document).ready(function () {
     let deleteRecord = "";
     let disable = true;
     let enable = false;
-    let computerBudget = 150;
+    let computerBudget = 50;
     let userBudget = 150;
     let computerPlayerName = "";
     let userPlayerName = "";
@@ -34,10 +33,6 @@ $(document).ready(function () {
     let gameObject = {};
     let userScore = 0;
     let computerScore = 0;
-    let qbArray = [];
-    let rbArray = [];
-    let wrArray = [];
-    let kArray = [];
     // create a random week on every new game
     let week = parseInt([Math.floor(Math.random()*17)]);
     
@@ -113,6 +108,7 @@ $(document).ready(function () {
                 $(".player-dropdown").on("click", function () {
                     // grab the player ID from the click
                     playerId = ($(this).attr("data-id"));
+                    
                     // callback function for grabbing the image
                     populateUserTeam(function (data) {
                         // parse the data for use     
@@ -137,7 +133,7 @@ $(document).ready(function () {
                             // if kicker's value is null then make it $5
                             if (data.Position === "K") {
                                 userSalary = 5;
-                            }
+                            };
                             // push the object to the user's team array
                             userTeam.push({ week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, salary: userSalary, email: userEmail, teamName: teamName });
                             // subtract the value of the player from the user's budget
@@ -157,7 +153,7 @@ $(document).ready(function () {
                     });
 
                     // callback function for populating the computer's team
-                    populateComputerTeam(function (data) {
+                    populateComputerTeam(function(data) {
                         // parse the data for use
                         data = JSON.parse(data);
                         // callback function to determine if computer player is in user's team
@@ -177,7 +173,12 @@ $(document).ready(function () {
                         duplicatePlayer = computerTeam.filter(item => item.Position === data.Position).map(item => item.PlayerID)
 
                         // check all conditions before pushing to computer's team
-                        if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (userBudget >= 0)) {
+                        if (computerTeam.length >= 5 && computerBudget < 0) {
+                            // alert("OVER");
+                            computerBudget = 50;
+                            testTwo();
+                        }
+                         else if ((computerTeam.length < 6) && (compareUserB < 0) && (compareComputerB < 0) && (comparePositionComputer < 0) && (pushComputer) && (duplicatePlayer.length < 2) && (userBudget >= 0)) {
                             // if met, push
                             computerTeam.push({ week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, email: userEmail, teamName: "The Computer" });
                             //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
@@ -198,9 +199,9 @@ $(document).ready(function () {
                         // render the team after all these checks
                         renderComputerTeam();
 
-                    });  // end of populate function 
+                        });  // end of populate function 
 
-                }); // end of click function
+                    }); // end of click function
 
                 // empty the player array
                 playerArray = [];
@@ -288,18 +289,19 @@ $(document).ready(function () {
                 playerId = playerArray[playerIdIndex].PlayerID;
                 // need to clear out array before each loop through
                 playerIds = []; 
-                if (qbArray.length > 15) {
-                    qbArray = [];
-                };
-                if (rbArray.length > 15) {
-                    qbArray = [];
-                };
-                if (wrArray.length > 15) {
-                    wrArray = [];
-                };
-                if (kArray.length > 15) {
-                    kArray = [];
-                };
+                // ** THIS IS US STARTING TO WORK ON REPOPULATING COMPUTER TEAM IF IT GOES BELOW $0, NEED TO FINISH
+                // if (qbArray.length > 15) {
+                //     qbArray = [];
+                // };
+                // if (rbArray.length > 15) {
+                //     qbArray = [];
+                // };
+                // if (wrArray.length > 15) {
+                //     wrArray = [];
+                // };
+                // if (kArray.length > 15) {
+                //     kArray = [];
+                // };
                 // loop through that array and push them to a new playerIds array
                 for (let i = 0; i < 15; i++) {
                     // if the salary is null make it $5
@@ -307,18 +309,17 @@ $(document).ready(function () {
                         playerArray[i].YahooSalary = 5;
                     }
                     // push needed info into the playerIds object
-                    // ** THIS IS US STARTING TO WORK ON REPOPULATING COMPUTER TEAM IF IT GOES BELOW $0, NEED TO FINISH
                     playerIds.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
-                    if (position === "QB") {
-                        qbArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
-                    } else if (position === "RB") {
-                        rbArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
-                    } else if (position === "WR") {
-                        wrArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
-                    } else {
-                        kArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });   
-                    }
-                    console.log(qbArray, rbArray, wrArray, kArray);
+                    // if (position === "QB") {
+                    //     qbArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    // } else if (position === "RB") {
+                    //     rbArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    // } else if (position === "WR") {
+                    //     wrArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    // } else {
+                    //     kArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });   
+                    // }
+                    // console.log(qbArray, rbArray, wrArray, kArray);
                 }
                 // stop at the top 15
                 if (playerIdIndex > 20) {
@@ -504,6 +505,7 @@ $(document).ready(function () {
         // empty the grid
         $(".matchup-grid").empty();
         // insert loading gif while results are fetched
+        // let loadingGif = $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"});
         // $(".matchup-grid").append(loadingGif);
         // combine the user & computer intoo one object
         gameObject = { user: userTeam, computer: computerTeam };
@@ -631,5 +633,5 @@ $(document).ready(function () {
         });
     
     };
-    
+
 });
