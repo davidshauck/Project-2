@@ -34,6 +34,10 @@ $(document).ready(function () {
     let gameObject = {};
     let userScore = 0;
     let computerScore = 0;
+    let qbArray = [];
+    let rbArray = [];
+    let wrArray = [];
+    let kArray = [];
     // create a random week on every new game
     let week = parseInt([Math.floor(Math.random()*17)]);
     
@@ -77,7 +81,7 @@ $(document).ready(function () {
             // callback function for getting player IDs from API
             getPlayerIds().then(getPlayerInfo).then(function (data) {
                 // set random computer player for later use (the *20 picks top 20 players per position; can be changed)
-                computerPlayer = playerArray[Math.floor(Math.random() * 15)].PlayerID;
+                computerPlayer = playerArray[Math.floor(Math.random() * 20)].PlayerID;
                 // create dynamic list of players for user to choose from
                 let playerDropdown = $("<a>");
                 // loop through 15 times to give user 15 options
@@ -178,7 +182,7 @@ $(document).ready(function () {
                             computerTeam.push({ week: week, PlayerID: data.PlayerID, url: data.PhotoUrl, name: data.Name, localPosition: localPosition, Position: data.Position, email: userEmail, teamName: "The Computer" });
                             //got this here https://stackoverflow.com/questions/42756724/get-key-value-based-on-value-of-another-key-in-object
                             let computerSalary = playerIds.filter(item => item.PlayerID === data.PlayerID).map(item => item.YahooSalary);
-                            // change null to $5
+                            // if the user salary is null (which all the kickers are) change it to $5
                             if (!computerSalary[0]) {
                                 computerSalary = parseInt(5);
                             }
@@ -284,6 +288,18 @@ $(document).ready(function () {
                 playerId = playerArray[playerIdIndex].PlayerID;
                 // need to clear out array before each loop through
                 playerIds = []; 
+                if (qbArray.length > 15) {
+                    qbArray = [];
+                };
+                if (rbArray.length > 15) {
+                    qbArray = [];
+                };
+                if (wrArray.length > 15) {
+                    wrArray = [];
+                };
+                if (kArray.length > 15) {
+                    kArray = [];
+                };
                 // loop through that array and push them to a new playerIds array
                 for (let i = 0; i < 15; i++) {
                     // if the salary is null make it $5
@@ -291,11 +307,22 @@ $(document).ready(function () {
                         playerArray[i].YahooSalary = 5;
                     }
                     // push needed info into the playerIds object
-                    playerIds.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary })
+                    // ** THIS IS US STARTING TO WORK ON REPOPULATING COMPUTER TEAM IF IT GOES BELOW $0, NEED TO FINISH
+                    playerIds.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    if (position === "QB") {
+                        qbArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    } else if (position === "RB") {
+                        rbArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    } else if (position === "WR") {
+                        wrArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });
+                    } else {
+                        kArray.push({ Name: playerArray[i].Name, PlayerID: playerArray[i].PlayerID, Position: playerArray[i].Position, YahooSalary: playerArray[i].YahooSalary });   
+                    }
+                    console.log(qbArray, rbArray, wrArray, kArray);
                 }
                 // stop at the top 15
-                if (playerIdIndex > 15) {
-                    playerIdIndex = 15;
+                if (playerIdIndex > 20) {
+                    playerIdIndex = 20;
                 };
             });
     };
@@ -473,11 +500,11 @@ $(document).ready(function () {
 
     // submit button function
     $(document.body).on("click", ".submit-button", function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         // empty the grid
         $(".matchup-grid").empty();
-        // add loading gift while results are fetched
-        $(".matchup-grid").append(loadingGif);
+        // insert loading gif while results are fetched
+        // $(".matchup-grid").append(loadingGif);
         // combine the user & computer intoo one object
         gameObject = { user: userTeam, computer: computerTeam };
         // pass the object into the submit game function
