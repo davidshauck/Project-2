@@ -1,6 +1,4 @@
-require("dotenv").config();
-
-module.exports = {
+ {
     "development": {
       "username": "root",
       "password": "Hazel123",
@@ -17,15 +15,6 @@ module.exports = {
       "port": 3306,
       "dialect": "mysql"
     },
-    // "production": {
-    //   "username": "root",
-    //   "password": null,
-    //   // "database": "database_production",
-    //   "database": process.env.HEROKU_PW,
-    //   "host": "127.0.0.1",
-    //   "port": 3306,
-    //   "dialect": "mysql"
-    // },
     "production": {
       "use_env_variable": "JAWSDB_URL",
       "dialect": "mysql"
