@@ -10,6 +10,7 @@ $(document).ready(function () {
     };
 
     // set up universal variables
+    let loadingGif = $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"});
     let playerArray = [];
     let playerIdIndex = 0;
     let playerIds = [];
@@ -24,7 +25,7 @@ $(document).ready(function () {
     let deleteRecord = "";
     let disable = true;
     let enable = false;
-    let computerBudget = 50;
+    let computerBudget = 150;
     let userBudget = 150;
     let computerPlayerName = "";
     let userPlayerName = "";
@@ -501,11 +502,12 @@ $(document).ready(function () {
 
     // submit button function
     $(document.body).on("click", ".submit-button", function (e) {
-        // e.preventDefault();
+        e.preventDefault();
         // empty the grid
+        
+
         $(".matchup-grid").empty();
         // insert loading gif while results are fetched
-        // let loadingGif = $("<img src='../images/loading_football.gif'>").css({width: "556px", "margin-left": "25%"});
         // $(".matchup-grid").append(loadingGif);
         // combine the user & computer intoo one object
         gameObject = { user: userTeam, computer: computerTeam };
@@ -599,7 +601,7 @@ $(document).ready(function () {
         }; // end of function
 
     function calculateWin(data) {
-        // debugger;
+        $(".matchup-grid").append(loadingGif);
         return new Promise(function(resolve) {
 
          // clear out scores
@@ -627,8 +629,9 @@ $(document).ready(function () {
     // Submits a new post and brings user to blog page upon completion
     function submitGame(Post) {
         console.log("SUBMIT ", Post);
-        
+        $(".matchup-grid").append(loadingGif);
         $.post("/api/submit/", Post, function() {
+
           window.location.href = "/results";
         });
     
