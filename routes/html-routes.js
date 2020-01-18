@@ -40,6 +40,11 @@ module.exports = function (app) {
   });
 
   // If no matching route is found default to home page, here header
+  app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+  });
+
+  // If no matching route is found default to home page, here header
   app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "../public/index.html"));
   });
