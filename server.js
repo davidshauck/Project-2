@@ -29,15 +29,7 @@ require("./routes/html-routes.js")(app);
 // Syncing our sequelize models and then starting our Express app
 // =============================================================
 
-if (process.env.JAWSDB_URL) {
-  console.log("There is a JAWS DB URL")
-  seq = new Sequelize(process.env.JAWSDB_URL)
-}
-else {
-  seq = require("./models").sequelize
-}
-
-seq.sync().then(() => {
+db.sequelize.sync().then(() => {
 app.listen(PORT, () => console.log('server started on port ' + PORT));
 });
 
