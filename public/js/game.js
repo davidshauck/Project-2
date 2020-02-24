@@ -75,7 +75,7 @@ $(document).ready(function () {
             // call the function that creates the position dropdown
             renderPositionDropdown();
             // callback function for getting player IDs from API
-            getPlayerIds().then(getPlayerInfo).then(function (data) {
+            getPlayerIds().then(getPlayerInfo).then(function() {
                 // set random computer player for later use (the *20 picks top 20 players per position; can be changed)
                 computerPlayer = playerArray[Math.floor(Math.random() * 20)].PlayerID;
                 // create dynamic list of players for user to choose from
@@ -260,7 +260,7 @@ $(document).ready(function () {
         // set the current player ID from the array we populated earlier    
         playerId = playerIds[playerIdIndex].PlayerID;
         // set the url being queried
-        let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=87259770c8654c4aa8d0dd12658e7d93";
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=981c5371e9544e40a8a5af72710ead64";
         // increment the index so it grabs the next one
         playerIdIndex += 1;
         // set it to stop at the top 15
@@ -281,7 +281,7 @@ $(document).ready(function () {
     // function for grabbing the top 15 players and storing their player IDs in an array (got this from Stack Overflow)
     function getPlayerIds() {
 
-        let queryUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week + "/" + position + "/FantasyPoints?key=87259770c8654c4aa8d0dd12658e7d93";
+        let queryUrl = "https://api.sportsdata.io/v3/nfl/stats/json/GameLeagueLeaders/2019REG/" + week + "/" + position + "/FantasyPoints?key=981c5371e9544e40a8a5af72710ead64";
 
         return $.ajax(queryUrl).then(function(json) {
                 // put all the returned data into a local array
@@ -330,12 +330,12 @@ $(document).ready(function () {
     };
     // use the playerId we just got in the ajax call to grab player info
     function getPlayerInfo() {
-        return $.ajax("https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=87259770c8654c4aa8d0dd12658e7d93");
+        return $.ajax("https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=981c5371e9544e40a8a5af72710ead64");
     };
     // part of the whole callback function
     function populateUserTeam(cb) {
 
-        let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=87259770c8654c4aa8d0dd12658e7d93";
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/" + playerId + "?key=981c5371e9544e40a8a5af72710ead64";
 
         $.ajax({
             url: playerUrl,
@@ -352,7 +352,7 @@ $(document).ready(function () {
     // a repeat of the function but this time for the computer's team
     function populateComputerTeam(cb) {
 
-        let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/" + computerPlayer + "?key=87259770c8654c4aa8d0dd12658e7d93";
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/scores/json/Player/" + computerPlayer + "?key=981c5371e9544e40a8a5af72710ead64";
 
         $.ajax({
             url: playerUrl,
@@ -569,7 +569,7 @@ $(document).ready(function () {
     // Ajax request for grabbing score info for user
     function getUserResults(cb){
         
-        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+playerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+playerId+"?key=981c5371e9544e40a8a5af72710ead64";
     
         $.ajax({
             url: playerUrl,
@@ -586,7 +586,7 @@ $(document).ready(function () {
 
       // Ajax request for grabbing score info for computer
       function getComputerResults(cb){
-        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+computerId+"?key=87259770c8654c4aa8d0dd12658e7d93";
+        let playerUrl = "https://api.sportsdata.io/v3/nfl/stats/json/PlayerGameStatsByPlayerID/2019/"+week+"/"+computerId+"?key=981c5371e9544e40a8a5af72710ead64";
             $.ajax({
                 url: playerUrl,
                 type: "GET",
