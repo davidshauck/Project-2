@@ -8,64 +8,74 @@
 let db = require("../models");
 let path = require("path");
 let sequelize = require("sequelize");
-let bcrypt = require('bcrypt');
+let bcrypt = require("bcrypt-nodejs");
 // number of encryption/decryption rounds
 const saltRounds = 10;
 
 // setting our db relations
-db.UserGames.belongsTo(db.BcryptUsers, {foreignKey: "email", sourceKey: "email"});
-db.BcryptUsers.hasMany(db.UserGames, {foreignKey: "email", sourceKey: "email"});
+db.UserGames.belongsTo(db.BcryptUsers, {
+  foreignKey: "email",
+  sourceKey: "email"
+});
+db.BcryptUsers.hasMany(db.UserGames, {
+  foreignKey: "email",
+  sourceKey: "email"
+});
 
 // Routes
 // =============================================================
 module.exports = function(app) {
-
   //register: storing name, email and password and redirecting to home page after signup
-  app.post('/api/user/create', function (req, res) {
-
+  app.post("/api/user/create", function(req, res) {
     db.BcryptUsers.findOne({
       where: {
-            email: req.body.emailsignup
-              }
-    }).then(function (user) {
-        if (!user) {
-          bcrypt.hash(req.body.passwordsignup, saltRounds, function (err, hash) {
-            db.BcryptUsers.create({
-              email: req.body.emailsignup,
-              name: req.body.usernamesignup,
-              password: hash
-              }).then(function(data) {
-                if (data) {      
-                res.redirect('/index');
-                }
-              });
-            });
-          } else {
-          res.sendFile(path.join(__dirname, "../public/signup.html"));
-          }
+        email: req.body.emailsignup
+      }
+    }).then(function(user) {
+      if (!user) {
+        bcrypt.hash(req.body.passwordsignup, saltRounds, function(err, hash) {
+          db.BcryptUsers.create({
+            email: req.body.emailsignup,
+            name: req.body.usernamesignup,
+            password: hash
+          }).then(function(data) {
+            if (data) {
+              res.redirect("/index");
+            }
+          });
         });
-      });
+      } else {
+        res.sendFile(path.join(__dirname, "../public/signup.html"));
+      }
+    });
+  });
 
+  app.post("/justin", (req, res) => {
+    res.json({ success: true });
+  });
+
+  app.post("/achille", (req, res) => {
+    res.json({ succes: true });
+  });
   //login page: storing and comparing email and password,and redirecting to home page after login
-  app.post('/api/user/', function (req, res) {
-
+  app.post("/api/user/", function(req, res) {
     db.BcryptUsers.findOne({
-         where: { 
-           email: req.body.email
-                }
-    }).then(function (user) {
-        if (!user) {
-          res.sendFile(path.join(__dirname, "../public/signup.html"));
-        } else {
-          bcrypt.compare(req.body.password, user.password, function (err, result) {
+      where: {
+        email: req.body.email
+      }
+    }).then(function(user) {
+      if (!user) {
+        res.sendFile(path.join(__dirname, "../public/signup.html"));
+      } else {
+        bcrypt.compare(req.body.password, user.password, function(err, result) {
           if (result == true) {
-            console.log("MATCH")
+            console.log("MATCH");
             res.send(user);
             res.sendFile(path.join(__dirname, "../public/game.html"));
           } else {
-          console.log("Incorrect passwrod")
-          res.send('Incorrect password');
-          res.redirect('/index');
+            console.log("Incorrect passwrod");
+            res.send("Incorrect password");
+            res.redirect("/index");
           }
         });
       }
@@ -73,36 +83,37 @@ module.exports = function(app) {
   });
 
   app.get("/api/teamname/", function(req, res) {
-
-    db.BcryptUsers.sequelize.query('SELECT name FROM BcryptUsers WHERE email = ?',
-    { replacements: [req.body.email], type: sequelize.QueryTypes.SELECT }
-
-      ).then(function(data) {
+    db.BcryptUsers.sequelize
+      .query("SELECT name FROM BcryptUsers WHERE email = ?", {
+        replacements: [req.body.email],
+        type: sequelize.QueryTypes.SELECT
+      })
+      .then(function(data) {
         console.log(data);
         res.json(data);
-      })
-
-    });
+      });
+  });
 
   app.get("/api/results/", function(req, res) {
     db.BcryptUsers.findAll({
-      include: [{
+      include: [
+        {
           model: db.UserGames,
           where: {
-              email: req.query.key
+            email: req.query.key
           }
         }
       ]
-      }).then(function(results){
-        res.json(results);
-      });
+    }).then(function(results) {
+      res.json(results);
+    });
   });
 
   // POST route for saving a new post
   app.post("/api/submit", function(req, res) {
     console.log(req.body);
     db.UserGames.bulkCreate([
-      { 
+      {
         isHuman: true,
         win: req.body.user[0].win,
         week: req.body.user[0].week,
@@ -162,12 +173,10 @@ module.exports = function(app) {
         PlayerID6: req.body.computer[5].PlayerID,
         url6: req.body.computer[5].url,
         playerName6: req.body.computer[5].name,
-        PlayerPoints6: req.body.computer[5].PlayerPoints,
-      },
+        PlayerPoints6: req.body.computer[5].PlayerPoints
+      }
     ]).then(function(dbResults) {
       res.json(dbResults);
     });
-          
   });
-
 };
