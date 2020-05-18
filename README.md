@@ -1,5 +1,5 @@
-# Project-Madlibs
-## MadLibs Game App
+# Project-2
+## Fantasy Football Draft App
 
 ## Introduction
 
