@@ -16,9 +16,7 @@ Team BannaKnifefight has worked together to create a retroactive fantasy footbal
 
 ## Check out the app in action
 
-- On GitHub
-  https://zhaoyu-qiao.github.io/Project-Madlibs/
-
+-  https://bananaknifefight.herokuapp.com/
 
 ## Team Members
 - Dave Hauck- https://github.com/davidshauck
